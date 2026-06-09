@@ -1,0 +1,46 @@
+{
+    "name": "miniorange_inc/privacy_and_compliance",
+    "description": "miniOrange Privacy Suite for Magento/Adobe Commerce — a bundled extension combining Cookie Consent and Personal Data Protection for comprehensive privacy compliance (GDPR, CCPA, DPDP Act). Provides a unified admin interface under a single 'Privacy' sidebar entry.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+        "Commercial"
+    ],
+    "keywords": [
+        "Magento 2",
+        "adobe commerce",
+        "privacy",
+        "GDPR",
+        "CCPA",
+        "DPDPA",
+        "cookie consent",
+        "personal data protection",
+        "Privacy Suite",
+        "Privacy and Compliance Manager"
+    ],
+    "authors": [
+        {
+            "name": "miniOrange",
+            "homepage": "https://www.miniorange.com/",
+            "email": "magentosupport@xecurify.com"
+        }
+    ],
+    "support": {
+        "email": "magentosupport@xecurify.com"
+    },
+    "require": {
+        "php": "~7||~8",
+        "miniorange_inc/cookie-consent": "*",
+        "miniorange_inc/miniorange-magento-pdprotect": "*"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MiniOrange\\Privacy\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
