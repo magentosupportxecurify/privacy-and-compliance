@@ -1,0 +1,146 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$viewModel  = $this->getViewModel();
+$planName   = $viewModel->getPlanName();
+$isPremium  = $viewModel->isPremium();
+
+$products = [
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/idp_upgrade.png'),
+        'alt'         => 'SAML IDP',
+        'title'       => 'SAML IDP',
+        'description' => 'Login into any third party applications using Magento credentials.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-idpsaml.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/twofa_upgrade.png'),
+        'alt'         => 'Two-Factor Authentication',
+        'title'       => 'Two-Factor Authentication',
+        'description' => 'Add a second layer of authentication to secure your Magento store frontend & backend accounts.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-miniorange-2fa.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/scim_upgrade.png'),
+        'alt'         => 'User Provisioning & Sync',
+        'title'       => 'User Provisioning & Sync',
+        'description' => 'Automate real-time two-way user sync between your applications and Magento.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-scim.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/otp_upgrade.png'),
+        'alt'         => 'Mobile Login',
+        'title'       => 'Mobile Login',
+        'description' => 'Log in to Magento store using mobile number/email — no password required.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-otp-verification.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/ldap_upgrade.png'),
+        'alt'         => 'LDAP / Active Directory Login',
+        'title'       => 'LDAP / Active Directory Login Integration',
+        'description' => 'Log in to Magento using LDAP/AD credentials from Active Directory, OpenLDAP, and more.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-miniorange-ldap.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/google_upgrade.png'),
+        'alt'         => 'Google One Tap Login',
+        'title'       => 'Google One Tap Login',
+        'description' => 'One-click sign in or register on your Magento store using Google Account credentials.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-google-one-tap-login.html',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/security_upgrade.png'),
+        'alt'         => 'Security Suite',
+        'title'       => 'Security Suite',
+        'description' => 'Secure your Magento store with robust security tools.',
+        'link'        => 'https://plugins.miniorange.com/magento-2-security-suite-extension',
+    ],
+    [
+        'image'       => $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/social_upgrade.png'),
+        'alt'         => 'Social Login & Share',
+        'title'       => 'Social Login & Share',
+        'description' => 'Log in to Magento using Facebook, Instagram, Google, Twitter, LinkedIn, and more.',
+        'link'        => 'https://commercemarketplace.adobe.com/miniorange-inc-miniorange-social-login.html',
+    ],
+];
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+
+    <!-- Current Plan Banner -->
+    <div class="mopdp-upgrade-panel mopdp-upgrade-panel--gray" style="margin-bottom: 1.5rem;">
+        <div style="padding: 1.5rem;">
+            <div class="mopdp-upgrade-banner">
+                <div class="mopdp-plan-info">
+                    <div class="mopdp-plan-status"><?= $this->escapeHtml(__('Current Plan')) ?></div>
+                    <div class="mopdp-plan-title">
+                        <?= $this->escapeHtml(__($planName)) ?>
+                        <?php
+                            // Badge colour: green = Premium, amber = Trial, blue = Free
+                            if (str_contains($planName, 'Premium')) {
+                                $badgeBg = '#059669'; $badgeText = '#fff';
+                            } elseif (str_contains($planName, 'Trial')) {
+                                $badgeBg = '#f59e0b'; $badgeText = '#fff';
+                            } else {
+                                $badgeBg = '#1979c3'; $badgeText = '#fff';
+                            }
+                        ?>
+                        <span class="mopdp-plan-version">
+                            <?= $this->escapeHtml(__('Version')) ?> <?= $this->escapeHtml($viewModel->getCurrentVersion()) ?>
+                        </span>
+                    </div>
+                </div>
+                <a href="https://plugins.miniorange.com/magento-personal-data-protection"
+                   target="_blank" class="mopdp-btn mopdp-btn--primary mopdp-btn--upgrade">
+                    <i class="fas fa-arrow-circle-up"></i>
+                    <?= $this->escapeHtml(__('Click Here to Upgrade')) ?>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Products -->
+    <div class="mopdp-upgrade-panel">
+        <div class="mopdp-upgrade-panel-header">
+            <div class="mopdp-upgrade-panel-title-wrap">
+                <h2 class="mopdp-upgrade-panel-title"><?= $this->escapeHtml(__('Related Products')) ?></h2>
+                <p class="mopdp-upgrade-panel-subtitle"><?= $this->escapeHtml(__('Enhance your Magento store with our complementary extensions')) ?></p>
+            </div>
+            <div>
+                <button type="button" class="mopdp-btn mopdp-btn--outline" onclick="window.open('https://plugins.miniorange.com/magento','_blank')">
+                    <i class="fas fa-th-large"></i>
+                    <?= $this->escapeHtml(__('View All Products')) ?>
+                </button>
+            </div>
+        </div>
+
+        <div style="padding: 1.5rem;">
+            <div class="mopdp-products-grid">
+                <?php foreach ($products as $product): ?>
+                <div class="mopdp-product-card">
+                    <div class="mopdp-product-image">
+                        <img src="<?= $this->escapeUrl($product['image']) ?>"
+                             loading="lazy"
+                             alt="<?= $this->escapeHtmlAttr($product['alt']) ?>">
+                    </div>
+                    <div class="mopdp-product-details">
+                        <h3 class="mopdp-product-title"><?= $this->escapeHtml($product['title']) ?></h3>
+                        <p class="mopdp-product-desc"><?= $this->escapeHtml($product['description']) ?></p>
+                        <div class="mopdp-product-actions">
+                            <a href="<?= $this->escapeUrl($product['link']) ?>"
+                               target="_blank"
+                               class="mopdp-btn mopdp-btn--primary mopdp-btn--sm">
+                                <?= $this->escapeHtml(__('View Details')) ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<?php /* Styles for this tab are in view/adminhtml/web/css/upgrade.css */ ?>

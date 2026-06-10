@@ -1,0 +1,166 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$viewModel             = $this->getViewModel();
+$formKey               = $this->getBlockHtml('formkey');
+$displayPopup          = $viewModel->getDisplayPopup();
+$allowedCountriesMode  = $viewModel->getAllowedCountriesMode();
+$selectedCountries     = $viewModel->getCountryRestriction();
+$logGuest              = $viewModel->getLogGuestConsent();
+$logAutoClean      = $viewModel->getLogAutoClean();
+$cleanPeriod       = $viewModel->getLogAutoCleanPeriod();
+$cleanUnit         = $viewModel->getLogAutoCleanUnit();
+$saveUrl           = $viewModel->getTabUrl('generalsettings');
+$countryOptions    = $viewModel->getCountryOptions();
+$isPremium         = $viewModel->isPremium();
+$upgradeUrl        = $viewModel->getUpgradeUrl();
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('General Settings')) ?></div>
+
+    <form method="post" action="<?= $this->escapeUrl($saveUrl) ?>" id="mopdp-general-form">
+        <?= /* @noEscape */ $formKey ?>
+
+        <!-- Privacy Policy Popup Panel -->
+        <div class="mopdp-panel">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title"><?= $this->escapeHtml(__('Privacy Policy Settings')) ?></div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Control how the privacy policy popup is displayed to visitors')) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <!-- Display Privacy Policy Popup -->
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Display Privacy Policy Popup')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="display_popup" id="display_popup" value="1" <?= $displayPopup ? 'checked' : '' ?>>
+                            <?= $this->escapeHtml(__('Enable privacy policy popup')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Allowed Countries (locked in free) -->
+                <div class="form-row" style="<?= !$isPremium ? 'opacity:0.7;' : '' ?>">
+                    <label class="form-label">
+                        <?= $this->escapeHtml(__('Allowed Countries')) ?>
+                    </label>
+                    <div class="form-field">
+                        <select name="allowed_countries_mode" id="allowed_countries_mode"
+                                class="mopdp-select" style="width: 370px;"
+                                onchange="mopdpToggleAllowedCountries(this.value)"
+                                <?= !$isPremium ? 'disabled' : '' ?>>
+                            <option value="all"      <?= $allowedCountriesMode === 'all'      ? 'selected' : '' ?>><?= $this->escapeHtml(__('All')) ?></option>
+                            <option value="none"     <?= $allowedCountriesMode === 'none'     ? 'selected' : '' ?>><?= $this->escapeHtml(__('None')) ?></option>
+                            <option value="specific" <?= $allowedCountriesMode === 'specific' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Specific Countries')) ?></option>
+                        </select>
+                        <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red; font-weight:900" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <!-- Country Select (shown only when mode is Specific Countries) -->
+                <div class="form-row" id="mopdp-country-select-row" style="<?= ($allowedCountriesMode !== 'specific' || !$isPremium) ? 'display:none;' : '' ?>">
+                    <label class="form-label"><?= $this->escapeHtml(__('Select Countries')) ?></label>
+                    <div class="form-field">
+                        <select name="country_restriction[]" id="country_restriction"
+                                class="mopdp-select-multiple" multiple size="8"
+                                <?= !$isPremium ? 'disabled' : '' ?>>
+                            <?php foreach ($countryOptions as $option): ?>
+                                <?php if (empty($option['value'])) continue; ?>
+                                <option value="<?= $this->escapeHtmlAttr($option['value']) ?>"
+                                    <?= in_array($option['value'], $selectedCountries, true) ? 'selected' : '' ?>>
+                                    <?= $this->escapeHtml($option['label']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Consent Logging Panel -->
+        <div class="mopdp-panel" style="margin-top: 2rem;">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title"><?= $this->escapeHtml(__('Consent Logging')) ?></div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Configure how user consent is recorded and maintained')) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <!-- Log Guest Consent -->
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Log Privacy Consent')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="log_guest_consent" id="log_guest_consent" value="1" <?= $logGuest ? 'checked' : '' ?>>
+                            <?= $this->escapeHtml(__('Record consent responses of users')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Log Auto-Cleaning (toggle locked in free) -->
+                <div class="form-row" style="<?= !$isPremium ? 'opacity:0.7;' : '' ?>">
+                    <label class="form-label">
+                        <?= $this->escapeHtml(__('Log Auto-Cleaning')) ?>
+                    </label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="log_auto_clean" id="log_auto_clean" value="1"
+                                   checked
+                                   <?= !$isPremium ? 'disabled' : 'onchange="mopdpToggleCleanPeriod(this)"' ?>>
+                            <?= $this->escapeHtml(__('Automatically clean old consent logs')) ?>
+                            <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red; font-weight:900" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Log Auto-Cleaning Period (locked in free, always visible) -->
+                <div class="form-row" id="mopdp-clean-period-row"
+                     style="<?= !$isPremium ? 'opacity:0.7;' : (!$logAutoClean ? 'display:none;' : '') ?>">
+                    <label class="form-label">
+                        <?= $this->escapeHtml(__('Log Auto-Cleaning Period')) ?>
+                    </label>
+                    <div class="form-field">
+                        <div style="display:flex; align-items:center; gap:0.75rem;">
+                            <input type="number" name="log_auto_clean_period" id="log_auto_clean_period"
+                                   class="mopdp-input mopdp-input-short"
+                                   value="<?= !$isPremium ? 1 : (int) $cleanPeriod ?>" min="1" max="365"
+                                   <?= !$isPremium ? 'disabled' : '' ?>>
+                            <select name="log_auto_clean_unit" id="log_auto_clean_unit" class="mopdp-select" style="width: 265px;"
+                                    <?= !$isPremium ? 'disabled' : '' ?>>
+                                <option value="days"   <?= (!$isPremium || $cleanUnit === 'days')   ? 'selected' : '' ?>><?= $this->escapeHtml(__('Days')) ?></option>
+                                <option value="weeks"  <?= (!$isPremium ? false : $cleanUnit === 'weeks')  ? 'selected' : '' ?>><?= $this->escapeHtml(__('Weeks')) ?></option>
+                                <option value="months" <?= (!$isPremium ? false : $cleanUnit === 'months') ? 'selected' : '' ?>><?= $this->escapeHtml(__('Months')) ?></option>
+                            </select>
+                            <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red; font-weight:900" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="margin-top: 2rem; margin-bottom: 3rem;">
+            <button type="submit" class="btn btn-primary">
+                <?= $this->escapeHtml(__('Save Settings')) ?>
+            </button>
+        </div>
+
+    </form>
+</div>
+</div>

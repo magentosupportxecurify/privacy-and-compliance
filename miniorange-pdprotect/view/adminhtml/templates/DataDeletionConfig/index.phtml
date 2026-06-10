@@ -1,0 +1,151 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$viewModel          = $this->getViewModel();
+$upgradeUrl         = $viewModel->getUpgradeUrl();
+$abandonedValue     = $viewModel->getAbandonedValue();
+$abandonedUnit      = $viewModel->getAbandonedUnit();
+$recentValue        = $viewModel->getRecentDocsValue();
+$recentUnit         = $viewModel->getRecentDocsUnit();
+$orderStatusOptions = $viewModel->getOrderStatusOptions();
+$isPremium        = $viewModel->isPremium();
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('Data Deletion & Anonymization')) ?>
+    <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red;" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+</div>
+
+    <!-- ── Panel 1: Abandoned Customer Deletion ─────────────────────── -->
+    <div class="mopdp-panel" style="opacity:0.65;">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title">
+                    <?= $this->escapeHtml(__('Abandoned Customer Deletion')) ?>
+                </div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Automatically erase customer accounts with no orders placed after the configured period')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Enable')) ?></label>
+                <div class="form-field">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="custom-checkbox" disabled>
+                        <?= $this->escapeHtml(__('Enable abandoned customer deletion')) ?>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Delete customers inactive for')) ?></label>
+                <div class="form-field">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <input type="number" class="mopdp-input mopdp-input-short"
+                               value="<?= (int) $abandonedValue ?>" disabled>
+                        <select class="mopdp-select" style="width:200px;" disabled>
+                            <option value="days"   <?= $abandonedUnit === 'days'   ? 'selected' : '' ?>><?= $this->escapeHtml(__('Days')) ?></option>
+                            <option value="months" <?= $abandonedUnit === 'months' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Months')) ?></option>
+                            <option value="years"  <?= $abandonedUnit === 'years'  ? 'selected' : '' ?>><?= $this->escapeHtml(__('Years')) ?></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Panel 2: Stale Quote Cleanup ────────────────────────────── -->
+    <div class="mopdp-panel" style="margin-top:2rem; opacity:0.65;">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title">
+                    <?= $this->escapeHtml(__('Stale Quote Cleanup')) ?>
+                </div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Remove expired quote and cart data older than the configured period')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Enable')) ?></label>
+                <div class="form-field">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="custom-checkbox" disabled>
+                        <?= $this->escapeHtml(__('Enable stale document cleanup')) ?>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Delete documents older than')) ?></label>
+                <div class="form-field">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <input type="number" class="mopdp-input mopdp-input-short"
+                               value="<?= (int) $recentValue ?>" disabled>
+                        <select class="mopdp-select" style="width:200px;" disabled>
+                            <option value="days"   <?= $recentUnit === 'days'   ? 'selected' : '' ?>><?= $this->escapeHtml(__('Days')) ?></option>
+                            <option value="months" <?= $recentUnit === 'months' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Months')) ?></option>
+                            <option value="years"  <?= $recentUnit === 'years'  ? 'selected' : '' ?>><?= $this->escapeHtml(__('Years')) ?></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Panel 3: Order Status Based Deletion ─────────────────────── -->
+    <div class="mopdp-panel" style="margin-top:2rem; margin-bottom:3rem; opacity:0.65;">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title">
+                    <?= $this->escapeHtml(__('Order Status Based Deletion')) ?>
+                </div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Anonymize or delete orders with specific statuses during the weekly cron run')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Enable')) ?></label>
+                <div class="form-field">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="custom-checkbox" disabled>
+                        <?= $this->escapeHtml(__('Enable order status based deletion')) ?>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Order Statuses')) ?></label>
+                <div class="form-field">
+                    <select class="mopdp-select-multiple" multiple size="6" disabled>
+                        <?php foreach ($orderStatusOptions as $option): ?>
+                            <option value="<?= $this->escapeHtmlAttr($option['value']) ?>">
+                                <?= $this->escapeHtml($option['label']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('Action')) ?></label>
+                <div class="form-field">
+                    <select class="mopdp-select" style="width:250px;" disabled>
+                        <option value="anonymize" selected><?= $this->escapeHtml(__('Anonymize')) ?></option>
+                        <option value="delete"><?= $this->escapeHtml(__('Delete')) ?></option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>

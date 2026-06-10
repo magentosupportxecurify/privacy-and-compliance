@@ -1,0 +1,137 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\ConsentLogs $logsViewModel */
+$logsViewModel = $this->getData('consent_logs_view_model');
+$logs          = $logsViewModel->getLogs();
+$totalCount    = $logsViewModel->getTotalCount();
+$currentPage   = $logsViewModel->getCurrentPage();
+$totalPages    = $logsViewModel->getTotalPages();
+$limit         = $logsViewModel->getLimit();
+$currentFilter = $logsViewModel->getStatusFilter();
+
+$firstEntry  = $totalCount ? ($currentPage - 1) * $limit + 1 : 0;
+$lastEntry   = min($currentPage * $limit, $totalCount);
+$searchQuery    = $logsViewModel->getSearchQuery();
+$searchBaseUrl  = $logsViewModel->getSearchBaseUrl();
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('Consent Logs')) ?></div>
+
+    <div class="mopdp-panel">
+
+        <!-- Filter bar -->
+        <div class="mopdp-filter-bar">
+            <div class="mopdp-filter-container">
+                <div class="mopdp-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="mopdp-consent-search" class="mopdp-search-input"
+                           placeholder="<?= $this->escapeHtmlAttr(__('Search by email or IP…')) ?>"
+                           value="<?= $this->escapeHtmlAttr($searchQuery) ?>" />
+                </div>
+                <select class="mopdp-app-select" onchange="window.location.href=this.value">
+                    <option value="<?= $this->escapeUrl($logsViewModel->getFilterUrl('all')) ?>"       <?= $currentFilter === 'all'       ? 'selected' : '' ?>><?= $this->escapeHtml(__('All')) ?></option>
+                    <option value="<?= $this->escapeUrl($logsViewModel->getFilterUrl('accepted')) ?>"  <?= $currentFilter === 'accepted'  ? 'selected' : '' ?>><?= $this->escapeHtml(__('Accepted')) ?></option>
+                    <option value="<?= $this->escapeUrl($logsViewModel->getFilterUrl('withdrawn')) ?>" <?= $currentFilter === 'withdrawn' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Withdrawn')) ?></option>
+                    <option value="<?= $this->escapeUrl($logsViewModel->getFilterUrl('guest')) ?>"     <?= $currentFilter === 'guest'     ? 'selected' : '' ?>><?= $this->escapeHtml(__('Guest Entries')) ?></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mopdp-panel-body" style="padding:0;">
+
+            <?php if (empty($logs)): ?>
+            <div style="padding:3rem; text-align:center; color:#888;">
+                <i class="fa-solid fa-clipboard-list" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                <?= $this->escapeHtml(__('No consent logs yet.')) ?>
+            </div>
+            <?php else: ?>
+            <div style="overflow-x:auto;">
+                <table class="mopdp-requests-table">
+                    <thead>
+                        <tr>
+                            <th><?= $this->escapeHtml(__('ID')) ?></th>
+                            <th><?= $this->escapeHtml(__('Customer ID')) ?></th>
+                            <th><?= $this->escapeHtml(__('Email')) ?></th>
+                            <th><?= $this->escapeHtml(__('IP Address')) ?></th>
+                            <th><?= $this->escapeHtml(__('Country')) ?></th>
+                            <th><?= $this->escapeHtml(__('Status')) ?></th>
+                            <th><?= $this->escapeHtml(__('Date')) ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($logs as $log): ?>
+                        <?php
+                            $hasCustomer = !empty($log['customer_id']);
+                            $status      = (string) $log['consent_status'];
+                            $badgeClass  = match ($status) {
+                                'accepted'  => 'mopdp-status-approved',
+                                'withdrawn',
+                                'declined'  => 'mopdp-status-rejected',
+                                default     => 'mopdp-status-pending',
+                            };
+                        ?>
+                        <tr>
+                            <td><?= (int) $log['log_id'] ?></td>
+                            <td>
+                                <?php if ($hasCustomer): ?>
+                                    <span style="font-weight:600; color:#333;">#<?= (int) $log['customer_id'] ?></span>
+                                <?php else: ?>
+                                    <span class="mopdp-status-badge mopdp-status-pending" style="font-size:0.85rem;"><?= $this->escapeHtml(__('Guest')) ?></span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($log['visitor_email'])): ?>
+                                    <?= $this->escapeHtml($log['visitor_email']) ?>
+                                <?php else: ?>
+                                    <span style="color:#aaa;">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td><?= $this->escapeHtml($log['visitor_ip']) ?></td>
+                            <td>
+                                <?php if (!empty($log['country_code'])): ?>
+                                    <?= $this->escapeHtml(strtoupper($log['country_code'])) ?>
+                                <?php else: ?>
+                                    <span style="color:#aaa;">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <span class="mopdp-status-badge <?= $this->escapeHtmlAttr($badgeClass) ?>">
+                                    <?= $this->escapeHtml(ucfirst($status)) ?>
+                                </span>
+                            </td>
+                            <td><?= $this->escapeHtml($log['created_at']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination toolbar -->
+            <div class="mopdp-pagination-bar">
+                <span class="mopdp-pagination-count"><?= $this->escapeHtml(__('%1–%2 of %3', $firstEntry, $lastEntry, $totalCount)) ?></span>
+                <?php if ($currentPage > 1): ?>
+                    <a href="<?= $this->escapeUrl($logsViewModel->getPageUrl($currentPage - 1)) ?>" class="btn btn-secondary"><?= $this->escapeHtml(__('Back')) ?></a>
+                <?php else: ?>
+                    <button class="btn btn-secondary" disabled><?= $this->escapeHtml(__('Back')) ?></button>
+                <?php endif; ?>
+                <?php if ($currentPage < $totalPages): ?>
+                    <a href="<?= $this->escapeUrl($logsViewModel->getPageUrl($currentPage + 1)) ?>" class="btn btn-primary"><?= $this->escapeHtml(__('Next')) ?></a>
+                <?php else: ?>
+                    <button class="btn btn-primary" disabled><?= $this->escapeHtml(__('Next')) ?></button>
+                <?php endif; ?>
+            </div>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+window.MOPDP_ConsentLogs = {
+    searchBaseUrl: '<?= /* @noEscape */ $this->escapeJs($searchBaseUrl) ?>'
+};
+</script>

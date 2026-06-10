@@ -1,0 +1,164 @@
+/* MiniOrange PDProtect - Upgrade tab styles */
+
+/* ── Upgrade page layout ─────────────────────────────────── */
+.mopdp-upgrade-panel {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+.mopdp-upgrade-panel--gray {
+    background: #f8f8f8;
+}
+
+/* ── Plan banner ─────────────────────────────────────────── */
+.mopdp-upgrade-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.mopdp-plan-info {
+    flex: 1;
+}
+.mopdp-plan-status {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+}
+.mopdp-plan-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+}
+.mopdp-plan-version {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #666;
+    margin-left: 0.5rem;
+}
+
+/* ── Panel header ────────────────────────────────────────── */
+.mopdp-upgrade-panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.mopdp-upgrade-panel-title-wrap {
+    flex: 1;
+}
+.mopdp-upgrade-panel-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 0.25rem;
+}
+.mopdp-upgrade-panel-subtitle {
+    font-size: 1.4rem;
+    color: #666;
+    margin: 0;
+}
+
+/* ── Products grid ───────────────────────────────────────── */
+.mopdp-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+.mopdp-product-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.mopdp-product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+.mopdp-product-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1.5rem 0;
+    background: #fff;
+    min-height: 140px;
+}
+.mopdp-product-image img {
+    max-width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+}
+.mopdp-product-details {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.mopdp-product-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 0.5rem;
+}
+.mopdp-product-desc {
+    font-size: 1.3rem;
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+    flex: 1;
+}
+.mopdp-product-actions {
+    margin-top: auto;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.mopdp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    border: none;
+    white-space: nowrap;
+}
+.mopdp-btn--primary {
+    background: #EB5202;
+    color: #fff;
+}
+.mopdp-btn--primary:hover {
+    background: #c84602;
+    color: #fff;
+}
+.mopdp-btn--outline {
+    background: #fff;
+    color: #EB5202;
+    border: 1px solid #EB5202;
+}
+.mopdp-btn--outline:hover {
+    background: #fff3ea;
+}
+.mopdp-btn--upgrade {
+    font-size: 1.5rem;
+    padding: 0.75rem 1.5rem;
+}
+.mopdp-btn--sm {
+    font-size: 1.3rem;
+    padding: 0.5rem 1rem;
+}

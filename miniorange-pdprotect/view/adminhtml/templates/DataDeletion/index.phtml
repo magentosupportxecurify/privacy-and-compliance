@@ -1,0 +1,208 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\DeletionRequests $deletionViewModel */
+$deletionViewModel = $this->getData('deletion_view_model');
+$requests          = $deletionViewModel->getRequests();
+$updateStatusUrl   = $deletionViewModel->getUpdateStatusUrl();
+
+$totalCount    = $deletionViewModel->getTotalCount();
+$currentPage   = $deletionViewModel->getCurrentPage();
+$totalPages    = $deletionViewModel->getTotalPages();
+$limit         = $deletionViewModel->getLimit();
+$currentFilter = $deletionViewModel->getStatusFilter();
+
+$firstEntry = $totalCount ? ($currentPage - 1) * $limit + 1 : 0;
+$lastEntry  = min($currentPage * $limit, $totalCount);
+
+$searchQuery   = $deletionViewModel->getSearchQuery();
+$searchBaseUrl = $deletionViewModel->getSearchBaseUrl();
+
+$limitReached      = $deletionViewModel->hasReachedDeleteLimit();
+$approvalCount     = $deletionViewModel->getDeleteApprovalCount();
+$approvalLimit     = $deletionViewModel->getDeleteApprovalLifetimeLimit();
+
+$jsLabelApproveTitle = $this->escapeJs(__('Approve Deletion Request'));
+$jsLabelRejectTitle  = $this->escapeJs(__('Reject Deletion Request'));
+$jsLabelApprove      = $this->escapeJs(__('Approve'));
+$jsLabelReject       = $this->escapeJs(__('Reject'));
+$jsLabelAdminNote    = $this->escapeJs(__('Admin Note'));
+$jsLabelOptional     = $this->escapeJs(__('(optional)'));
+$viewModel        = $this->getViewModel();
+$isPremium        = $viewModel->isPremium();
+$upgradeUrl       = $viewModel->getUpgradeUrl();
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('Delete Requests')) ?>
+    <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red;" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+</div>
+
+    <?php if ($limitReached): ?>
+    <div style="margin-bottom:1.5rem; padding:1rem; background:#fef3c7; border:1px solid #f59e0b; border-radius:8px;">
+        <i class="fas fa-crown" style="color:#f59e0b;"></i>
+        <span style="color:#92400e;">
+            <?= $this->escapeHtml(__('Lifetime approval limit reached (%1/%2).', $approvalCount, $approvalLimit)) ?>
+            <?= $this->escapeHtml(__('Upgrade to Premium for unlimited approvals.')) ?>
+        </span>
+    </div>
+    <?php endif; ?>
+
+    <div class="mopdp-panel">
+
+        <!-- Filter bar -->
+        <div class="mopdp-filter-bar">
+            <div class="mopdp-filter-container" style="margin:2rem !important">
+                <div class="mopdp-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="mopdp-deletion-search" class="mopdp-search-input"
+                           placeholder="<?= $this->escapeHtmlAttr(__('Search by name or email…')) ?>"
+                           value="<?= $this->escapeHtmlAttr($searchQuery) ?>" />
+                </div>
+                <select class="mopdp-app-select" onchange="window.location.href=this.value">
+                    <option value="<?= $this->escapeUrl($deletionViewModel->getFilterUrl('all')) ?>"      <?= $currentFilter === 'all'      ? 'selected' : '' ?>><?= $this->escapeHtml(__('All')) ?></option>
+                    <option value="<?= $this->escapeUrl($deletionViewModel->getFilterUrl('pending')) ?>"  <?= $currentFilter === 'pending'  ? 'selected' : '' ?>><?= $this->escapeHtml(__('Pending')) ?></option>
+                    <option value="<?= $this->escapeUrl($deletionViewModel->getFilterUrl('approved')) ?>" <?= $currentFilter === 'approved' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Approved')) ?></option>
+                    <option value="<?= $this->escapeUrl($deletionViewModel->getFilterUrl('rejected')) ?>" <?= $currentFilter === 'rejected' ? 'selected' : '' ?>><?= $this->escapeHtml(__('Rejected')) ?></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mopdp-panel-body" style="padding:0;">
+
+            <?php if (empty($requests)): ?>
+            <div style="padding:3rem; text-align:center; color:#888;">
+                <i class="fa-solid fa-inbox" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                <?= $this->escapeHtml(__('No deletion requests yet.')) ?>
+            </div>
+            <?php else: ?>
+            <div style="overflow-x:auto;">
+                <table class="mopdp-requests-table">
+                    <thead>
+                        <tr>
+                            <th><?= $this->escapeHtml(__('ID')) ?></th>
+                            <th><?= $this->escapeHtml(__('Customer')) ?></th>
+                            <th><?= $this->escapeHtml(__('Email')) ?></th>
+                            <th><?= $this->escapeHtml(__('Requested')) ?></th>
+                            <th><?= $this->escapeHtml(__('Status')) ?></th>
+                            <th><?= $this->escapeHtml(__('Processed')) ?></th>
+                            <th><?= $this->escapeHtml(__('Actions')) ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($requests as $req): ?>
+                        <tr>
+                            <td><?= (int) $req['request_id'] ?></td>
+                            <td><?= $this->escapeHtml($req['customer_name']) ?></td>
+                            <td><?= $this->escapeHtml($req['customer_email']) ?></td>
+                            <td><?= $this->escapeHtml($req['requested_at']) ?></td>
+                            <td>
+                                <span class="mopdp-status-badge mopdp-status-<?= $this->escapeHtmlAttr($req['status']) ?>">
+                                    <?= $this->escapeHtml(ucfirst($req['status'])) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if ($req['processed_at']): ?>
+                                    <?= $this->escapeHtml($req['processed_at']) ?>
+                                    <?php if ($req['admin_note']): ?>
+                                    <br><small style="color:#888;"><?= $this->escapeHtml($req['admin_note']) ?></small>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <span style="color:#aaa;">—</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if ($req['status'] === 'pending'): ?>
+                                    <?php if ($limitReached): ?>
+                                    <button type="button" class="mopdp-btn-approve" disabled style="opacity:0.5; cursor:not-allowed;"
+                                            title="<?= $this->escapeHtmlAttr(__('Limit reached (%1/%2)', $approvalCount, $approvalLimit)) ?>">
+                                        <?= $this->escapeHtml(__('Limit reached (%1/%2)', $approvalCount, $approvalLimit)) ?>
+                                    </button>
+                                    <?php else: ?>
+                                    <button type="button" class="mopdp-btn-approve"
+                                            onclick="mopdpOpenActionModal(<?= (int)$req['request_id'] ?>, 'approved', '<?= $this->escapeJs($req['customer_name']) ?>')">
+                                        <?= $this->escapeHtml(__('Approve')) ?>
+                                    </button>
+                                    <?php endif; ?>
+                                    <button type="button" class="mopdp-btn-reject"
+                                            onclick="mopdpOpenActionModal(<?= (int)$req['request_id'] ?>, 'rejected', '<?= $this->escapeJs($req['customer_name']) ?>')">
+                                        <?= $this->escapeHtml(__('Reject')) ?>
+                                    </button>
+                                <?php else: ?>
+                                <span style="color:#aaa;"><?= $this->escapeHtml(__('No actions')) ?></span>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mopdp-pagination-bar">
+                <span class="mopdp-pagination-count"><?= $this->escapeHtml(__('%1–%2 of %3', $firstEntry, $lastEntry, $totalCount)) ?></span>
+                <?php if ($currentPage > 1): ?>
+                    <a href="<?= $this->escapeUrl($deletionViewModel->getPageUrl($currentPage - 1)) ?>" class="btn btn-secondary"><?= $this->escapeHtml(__('Back')) ?></a>
+                <?php else: ?>
+                    <button class="btn btn-secondary" disabled><?= $this->escapeHtml(__('Back')) ?></button>
+                <?php endif; ?>
+                <?php if ($currentPage < $totalPages): ?>
+                    <a href="<?= $this->escapeUrl($deletionViewModel->getPageUrl($currentPage + 1)) ?>" class="btn btn-primary"><?= $this->escapeHtml(__('Next')) ?></a>
+                <?php else: ?>
+                    <button class="btn btn-primary" disabled><?= $this->escapeHtml(__('Next')) ?></button>
+                <?php endif; ?>
+            </div>
+
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Action Modal -->
+<div id="mopdp-action-modal" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(0,0,0,0.5);">
+    <div style="background:#fff; border-radius:8px; width:440px; max-width:95vw; box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <div style="padding:1.25rem 1.5rem; border-bottom:1px solid #e0e0e0; display:flex; justify-content:space-between; align-items:center;">
+            <strong id="mopdp-modal-action-title" style="font-size:1rem;"></strong>
+            <button onclick="mopdpCloseActionModal()" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:#888;">&#x00D7;</button>
+        </div>
+        <div style="padding:1.5rem;">
+            <p id="mopdp-modal-action-desc" style="margin:0 0 1rem; color:#555;"></p>
+            <label style="display:block; font-size:0.875rem; font-weight:500; margin-bottom:0.4rem;">
+                <span id="mopdp-modal-note-label"></span>
+                <span id="mopdp-modal-note-optional" style="color:#888; font-weight:400;"></span>
+            </label>
+            <textarea id="mopdp-action-note" rows="3"
+                      style="width:100%; border:1px solid #d0d0d0; border-radius:6px; padding:0.6rem; font-size:0.875rem; resize:vertical; box-sizing:border-box;"
+                      placeholder="<?= $this->escapeHtmlAttr(__('Add a note visible in the request log...')) ?>"></textarea>
+        </div>
+        <div style="padding:1rem 1.5rem; border-top:1px solid #e0e0e0; display:flex; justify-content:flex-end; gap:0.75rem;">
+            <button onclick="mopdpCloseActionModal()" style="padding:0.5rem 1.2rem; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;"><?= $this->escapeHtml(__('Cancel')) ?></button>
+            <form id="mopdp-action-form" method="post" action="<?= $this->escapeUrl($updateStatusUrl) ?>" style="display:inline;">
+                <?= $this->getBlockHtml('formkey') ?>
+                <input type="hidden" name="request_id" id="mopdp-action-request-id" value="">
+                <input type="hidden" name="status" id="mopdp-action-status" value="">
+                <input type="hidden" name="admin_note" id="mopdp-action-note-hidden" value="">
+                <button type="submit" id="mopdp-action-submit-btn"
+                        style="padding:0.5rem 1.2rem; border:none; border-radius:4px; cursor:pointer; color:#fff; font-weight:500;">
+                    <?= $this->escapeHtml(__('Confirm')) ?>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+window.MOPDP_JS = {
+    approveTitle: '<?= /* @noEscape */ $jsLabelApproveTitle ?>',
+    rejectTitle:  '<?= /* @noEscape */ $jsLabelRejectTitle ?>',
+    approve:      '<?= /* @noEscape */ $jsLabelApprove ?>',
+    reject:       '<?= /* @noEscape */ $jsLabelReject ?>',
+    adminNote:    '<?= /* @noEscape */ $jsLabelAdminNote ?>',
+    optional:     '<?= /* @noEscape */ $jsLabelOptional ?>',
+    searchBaseUrl: '<?= /* @noEscape */ $this->escapeJs($searchBaseUrl) ?>'
+};
+</script>

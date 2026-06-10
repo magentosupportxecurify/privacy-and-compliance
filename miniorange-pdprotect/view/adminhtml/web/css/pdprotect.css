@@ -1,0 +1,361 @@
+/* MiniOrange PDProtect - Admin Styles (matches SSO theme exactly) */
+
+:root {
+    --mopdp-primary: rgb(235, 82, 2);
+    --mopdp-primary-hover: rgb(200, 70, 2);
+    --mopdp-dark: rgb(34, 34, 34);
+    --mopdp-border: rgb(214, 214, 214);
+    --mopdp-bg-light: rgb(245, 245, 245);
+    --mopdp-bg-lighter: rgb(248, 248, 248);
+}
+
+/* ── Tab Navigation ── */
+.mopdp-topnav {
+    background-color: #333;
+    overflow: hidden;
+    padding: 0;
+    margin-bottom: 2%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.mopdp-nav-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 14px 16px;
+    font-size: 1.7rem;
+    font-weight: 500;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    transition: color 0.2s, background-color 0.2s;
+    white-space: nowrap;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.mopdp-nav-tab:hover {
+    color: black;
+    background-color: #ee9c65;
+    text-decoration: none;
+}
+
+.mopdp-nav-tab.active {
+    background-color: var(--mopdp-primary);
+    font-weight: 600;
+}
+
+
+.mopdp-nav-tab i {
+    font-size: 1.4rem;
+}
+
+/* ── Page layout container (matches Okta's .main-content > .container) ── */
+.mopdp-main-content {
+    padding: 2rem 0;
+}
+
+.mopdp-container {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ── Panel / Card ── */
+.mopdp-panel {
+    background: #fff;
+    border: 1px solid var(--mopdp-border);
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.mopdp-panel-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--mopdp-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+}
+
+.mopdp-panel-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--mopdp-dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.mopdp-panel-subtitle {
+    font-size: 1.4rem;
+    color: #666;
+    margin-top: 1.3rem;
+}
+
+.mopdp-panel-body {
+    padding: 0;
+}
+
+/* ── SSO-identical Form Rows ── */
+.form-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.form-label {
+    width: 200px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    flex-shrink: 0;
+    padding-top: 0.3rem;
+    color: var(--mopdp-dark);
+}
+
+.form-field {
+    flex: 1;
+    margin-left: 5%;
+}
+
+.form-note {
+    font-size: 1.3rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+/* ── SSO-identical Custom Checkbox ── */
+:root {
+    --checkbox-size: 18px;
+}
+
+.custom-checkbox {
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    border: 2px solid #999;
+    border-radius: 3px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    position: relative;
+    background: white;
+    flex-shrink: 0;
+}
+
+.custom-checkbox:checked {
+    background: var(--mopdp-primary);
+    border-color: var(--mopdp-primary);
+}
+
+.custom-checkbox:checked::after {
+    content: '\2714';
+    font-size: 13px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--mopdp-dark);
+}
+
+/* ── Inputs ── */
+.mopdp-input {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--mopdp-border);
+    border-radius: 6px;
+    font-size: 1.5rem;
+    width: 370px;
+    color: var(--mopdp-dark);
+    background: #fff;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.mopdp-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(235, 82, 2, 0.12);
+}
+
+.mopdp-input-short {
+    width: 100px;
+}
+
+/* ── Select ── */
+.mopdp-select {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--mopdp-border);
+    border-radius: 6px;
+    font-size: 1.5rem;
+    color: var(--mopdp-dark);
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.mopdp-select:focus {
+    outline: none;
+}
+
+.mopdp-select-multiple {
+    width: 100%;
+    max-width: 370px;
+    padding: 0.4rem;
+    border: 1px solid var(--mopdp-border);
+    border-radius: 6px;
+    font-size: 1.4rem;
+    color: var(--mopdp-dark);
+    background: #fff;
+    font-family: inherit;
+}
+
+/* ── SSO-identical Buttons ── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 6px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: var(--mopdp-primary);
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: var(--mopdp-primary-hover);
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: #fff;
+    color: var(--mopdp-dark);
+    border: 1px solid var(--mopdp-border);
+}
+
+.btn-secondary:hover {
+    background: var(--mopdp-bg-lighter);
+    color: var(--mopdp-dark) !important;
+    text-decoration: none !important;
+}
+
+/* ── Coming Soon placeholder ── */
+.mopdp-coming-soon {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: #999;
+}
+
+.mopdp-coming-soon-icon {
+    font-size: 4rem;
+    color: var(--mopdp-primary);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.mopdp-coming-soon h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--mopdp-dark);
+    margin-bottom: 0.75rem;
+}
+
+.mopdp-coming-soon p {
+    font-size: 1.5rem;
+    color: #888;
+}
+
+/* ── Page Header ── */
+.mopdp-page-header {
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: var(--mopdp-dark);
+    margin-bottom: 2.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ── Filter container (search + dropdown side by side) ── */
+.mopdp-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.mopdp-search-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.mopdp-search-wrap i {
+    position: absolute;
+    left: 10px;
+    color: #888;
+    font-size: 1.3rem;
+    pointer-events: none;
+}
+
+.mopdp-search-input {
+    width: 280px;
+    padding: 9px 10px 9px 32px;
+    font-size: 1.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    font-family: inherit;
+}
+
+.mopdp-search-input:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 4px rgba(102, 175, 233, .4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .form-label {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .mopdp-input {
+        width: 100%;
+    }
+
+    .mopdp-nav-tab {
+        padding: 1rem 1.2rem;
+        font-size: 1.3rem;
+    }
+
+    .container {
+        max-width: 95%;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+}

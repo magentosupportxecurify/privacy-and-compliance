@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+    Shared layout handle: mopdp_support
+    Include this in every PDProtect admin tab layout with:
+        <update handle="mopdp_support"/>
+    This injects the floating support icon widget without duplicating the block definition.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css  src="MiniOrange_PDProtect::css/support.css"/>
+        <script src="MiniOrange_PDProtect::js/support.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="mopdp.support"
+                   template="MiniOrange_PDProtect::Support/index.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MiniOrange\PDProtect\ViewModel\Adminhtml\Configure</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

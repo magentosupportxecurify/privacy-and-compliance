@@ -1,0 +1,283 @@
+/* ============================================================
+   MiniOrange PDProtect — Floating Support Widget
+   Styles for the fixed-position help icon + slide-up panel.
+   ============================================================ */
+
+/* ── Floating icon button ── */
+.mopdp-support-icon {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 50%;
+    background-color: #fbf6e599;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mopdp-support-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.mopdp-support-icon img {
+    width: 61px;
+    height: auto;
+    border-radius: 50%;
+    display: block;
+}
+
+/* ── Okta-style "Need Help?" bubble ── */
+.mopdp-help-container {
+    box-sizing: border-box;
+    width: 196px;
+    bottom: 25px;
+    position: fixed;
+    right: 92px;
+    z-index: 1001;
+    display: none;
+}
+
+.mopdp-help-container.mopdp-tooltip-visible {
+    display: block;
+}
+
+.mopdp-need {
+    cursor: pointer;
+    position: relative;
+    color: #1e2c38;
+    background: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 2px 6px 0 rgba(120, 111, 111, 0.4);
+}
+
+.mopdp-div11 {
+    overflow: hidden;
+    position: relative;
+    border-radius: inherit;
+}
+
+.mopdp-div12 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1rem;
+    max-width: 100%;
+    font-size: 1.4rem;
+    white-space: normal;
+}
+
+.mopdp-helpline {
+    font-size: 0.9em;
+    color: #1e2c38;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+/* Right-pointing tail toward the icon */
+.mopdp-span2 {
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    right: -10px;
+    bottom: 10px;
+    background-color: inherit;
+    z-index: -1;
+    transform: translateX(-6px) rotate(45deg);
+    pointer-events: none;
+    box-shadow: 2px -2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* ── Slide-up support panel ── */
+.mopdp-support-form {
+    position: fixed;
+    bottom: 11px;
+    right: 92px;
+    z-index: 999;
+    width: 300px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    display: none;
+    animation: mopdpFadeInUp 0.25s ease;
+}
+
+.mopdp-support-form.mopdp-form-open {
+    display: block;
+}
+
+@keyframes mopdpFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Panel header ── */
+.mopdp-support-form-head {
+    background: #000;
+    padding: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px 8px 0 0;
+    color: #fff;
+}
+
+.mopdp-support-form-head-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.mopdp-support-close-btn {
+    cursor: pointer;
+    color: #fff;
+    font-size: 1.4rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+/* ── Form body ── */
+.mopdp-support-form-body {
+    padding: 1.3rem;
+    font-size: 1.2rem;
+}
+
+.mopdp-support-field {
+    margin-bottom: 0;
+}
+
+.mopdp-support-label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #6b778c;
+    margin-bottom: 5px;
+}
+
+.mopdp-required {
+    color: red;
+    font-weight: normal;
+}
+
+.mopdp-support-optional {
+    color: #999;
+    font-weight: normal;
+}
+
+.mopdp-support-input,
+.mopdp-support-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    background: #fff;
+    color: #000;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+}
+
+.mopdp-support-input::placeholder,
+.mopdp-support-textarea::placeholder {
+    color: #a4b0be;
+}
+
+.mopdp-support-textarea {
+    resize: vertical;
+    rows: 4;
+}
+
+/* ── Error message ── */
+.mopdp-support-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    color: #b91c1c;
+    font-size: 12px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+/* ── Submit button ── */
+.mopdp-support-submit-btn {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    padding: 10px 0;
+}
+
+.mopdp-support-submit-btn:hover:not(:disabled) {
+    background: #222;
+}
+
+.mopdp-support-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* ── Success panel ── */
+.mopdp-success-msg {
+    display: none;
+    text-align: center;
+    padding: 15px 1rem;
+    font-size: 1.4rem;
+    border-radius: 5px;
+}
+
+.mopdp-success-msg-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.mopdp-success-msg-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.mopdp-success-msg-text {
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* ── Responsive: slightly smaller on narrow viewports ── */
+@media (max-width: 480px) {
+    .mopdp-support-form {
+        right: 82px;
+        width: calc(100vw - 100px);
+    }
+
+    .mopdp-support-icon {
+        right: 10px;
+        bottom: 12px;
+    }
+
+    .mopdp-help-container {
+        right: 82px;
+        bottom: 20px;
+    }
+}

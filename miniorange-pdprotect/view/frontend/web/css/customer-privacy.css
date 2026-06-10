@@ -1,0 +1,90 @@
+/* MiniOrange PDProtect - Customer Privacy Settings page (frontend) */
+
+.mopdp-privacy-wrap { max-width: 860px; }
+
+.mopdp-rights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+@media (max-width: 600px) {
+    .mopdp-rights-grid { grid-template-columns: 1fr; }
+}
+
+.mopdp-right-card {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: #fff;
+}
+.mopdp-right-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+.mopdp-right-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e8f1fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.mopdp-right-card__icon svg { width: 22px; height: 22px; stroke: #1979c3; }
+.mopdp-right-card__title { font-weight: 700; line-height: 1.2; }
+.mopdp-right-card__desc { line-height: 1.6; margin: 0; }
+.mopdp-right-card__note {
+    line-height: 1.5;
+    margin: 0;
+    padding: 0.6rem 0.85rem;
+    background: #f0f7ff;
+    border-radius: 6px;
+    border: 1px solid #c7dff5;
+}
+.mopdp-right-card__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #1979c3;
+    border-radius: 8px;
+    background: #1979c3;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+a:visited, .alink:visited {
+    color: #fff !important;
+}
+
+.mopdp-right-card__btn:hover {
+    background: #006bb4;
+    border-color: #006bb4;
+    color: #fff;
+    text-decoration: none !important;
+}
+.mopdp-right-card__btn svg { width: 18px; height: 18px; stroke: currentColor; flex-shrink: 0; }
+
+/* DPO contact rows */
+.mopdp-dpo-row { display: flex; gap: 1rem; align-items: center; }
+.mopdp-dpo-label { width: 60px; font-weight: 500; flex-shrink: 0; }
+.mopdp-dpo-value { word-break: break-word; }
+a.mopdp-dpo-value { color: #1979c3; text-decoration: none; }
+a.mopdp-dpo-value:hover { text-decoration: underline; }
+
+/* Premium action error blocker */
+.mo-premium-action { cursor: pointer; }

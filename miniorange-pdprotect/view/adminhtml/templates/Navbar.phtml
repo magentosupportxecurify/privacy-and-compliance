@@ -1,0 +1,73 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$viewModel = $this->getViewModel();
+
+$generalUrl           = $viewModel->getTabUrl('generalsettings');
+$privacyUrl           = $viewModel->getTabUrl('customerprivacy');
+$deletionUrl          = $viewModel->getTabUrl('datadeletion');
+$deletionConfigUrl    = $viewModel->getTabUrl('datadeletionconfig');
+$consentLogsUrl       = $viewModel->getTabUrl('consentlogs');
+$upgradeUrl           = $viewModel->getTabUrl('upgrade');
+$activeTab            = $viewModel->getCurrentActiveTab();
+
+// ── Trial / License status banner (premium only) ────────────────────────────
+// Mirrors SSO Navbar.phtml: shown above the nav tabs on every page.
+// Logic: show when premium is installed but no active license key (trial or expired trial).
+if ($viewModel->isPremium() && !$viewModel->isLicenseVerified()) {
+    $trialDays   = $viewModel->getTrialDaysRemaining();
+    $isExpired   = $trialDays <= 0 || $viewModel->isTrialExpired();
+    $statusColor = $isExpired ? '#f44336' : '#eb5202';
+    $message     = $isExpired
+        ? 'Your Trial account has expired. Please contact magentosupport@xecurify.com'
+        : 'Trial Version Active - ' . $trialDays . ' Days Remaining';
+
+    echo '<div style="background-color:#f8f9fa; border-left:4px solid ' . $statusColor . '; padding:16px;'
+       . ' margin:20px 14px; display:flex; align-items:center; justify-content:space-between;'
+       . ' box-shadow:0 1px 3px rgba(0,0,0,0.12);">'
+       . '<div style="display:flex; align-items:center; gap:12px;">'
+       . '<span style="color:' . $statusColor . '; font-size:16.4px; font-weight:bold;">' . $message . '</span>'
+       . '</div>'
+       . '<div style="display:flex; gap:12px;">';
+
+    if ($activeTab !== 'upgrade') {
+        echo '<button onclick="window.location.href=\'' . $this->escapeJs($upgradeUrl) . '\'"'
+           . ' style="background-color:#eb5202; color:white; border:none; padding:8px 16px;'
+           . ' border-radius:4px; cursor:pointer; font-size:14px; font-weight:bold;'
+           . ' display:flex; align-items:center; gap:8px;">'
+           . '<i class="fa fa-external-link" style="font-size:12px;"></i>'
+           . ' Upgrade Now'
+           . '</button>';
+    }
+
+    echo '</div></div>';
+}
+?>
+
+<div style="padding: 0 1%;">
+    <div class="mopdp-topnav" id="mopdpTopnav" style="display: flex; align-items: center;">
+        <?php if ($viewModel->isPremium()): ?>
+        <a class="mopdp-nav-tab <?= $activeTab === 'account' ? 'active' : '' ?>" href="<?= $this->escapeUrl($viewModel->getTabUrl('account')) ?>">
+            <i class="fa-solid fa-user"></i> <?= $this->escapeHtml(__('Account')) ?>
+        </a>
+        <?php endif; ?>
+        <a class="mopdp-nav-tab <?= $activeTab === 'generalsettings' ? 'active' : '' ?>" href="<?= $this->escapeUrl($generalUrl) ?>">
+            <i class="fa-solid fa-gear"></i> <?= $this->escapeHtml(__('General Settings')) ?>
+        </a>
+        <a class="mopdp-nav-tab <?= $activeTab === 'customerprivacy' ? 'active' : '' ?>" href="<?= $this->escapeUrl($privacyUrl) ?>">
+            <i class="fa-solid fa-user-shield"></i> <?= $this->escapeHtml(__('Customer Account Privacy')) ?>
+        </a>
+        <a class="mopdp-nav-tab <?= $activeTab === 'datadeletion' ? 'active' : '' ?>" href="<?= $this->escapeUrl($deletionUrl) ?>">
+            <i class="fa-solid fa-trash-can-arrow-up"></i> <?= $this->escapeHtml(__('Delete Requests')) ?>
+        </a>
+        <a class="mopdp-nav-tab <?= $activeTab === 'datadeletionconfig' ? 'active' : '' ?>" href="<?= $this->escapeUrl($deletionConfigUrl) ?>">
+            <i class="fa-solid fa-sliders"></i> <?= $this->escapeHtml(__('Data Deletion & Anonymization')) ?>
+        </a>
+        <a class="mopdp-nav-tab <?= $activeTab === 'consentlogs' ? 'active' : '' ?>" href="<?= $this->escapeUrl($consentLogsUrl) ?>">
+            <i class="fa-solid fa-clipboard-list"></i> <?= $this->escapeHtml(__('Consent Logs')) ?>
+        </a>
+        <a class="mopdp-nav-tab mopdp-nav-upgrade <?= $activeTab === 'upgrade' ? 'active' : '' ?>" href="<?= $this->escapeUrl($upgradeUrl) ?>">
+            <i class="fa-solid fa-arrow-up-right-dots"></i> <?= $this->escapeHtml(__('Upgrade')) ?>
+        </a>
+    </div>
+</div>

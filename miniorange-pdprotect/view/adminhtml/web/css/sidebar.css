@@ -1,0 +1,18 @@
+/* Admin sidebar icon for Personal Data Protection menu item.
+   Magento derives the CSS class from the last segment of the menu ID:
+   MiniOrange_PDProtect::pdprotect  →  .item-pdprotect
+*/
+.admin__menu .item-pdprotect.parent.level-0 > a:before,
+.admin__menu .item-pdprotect.level-0 > a:before {
+    content: url('../images/mo.png');
+    display: block;
+    width: 50px;
+    height: 42px;
+    margin: 0 auto 5px auto;
+}
+
+.admin__menu .item-pdprotect.level-0 > a {
+    color: #eca311;
+    font-weight: bold;
+    text-transform: none;
+}

@@ -1,0 +1,95 @@
+/* MiniOrange PDProtect - Consent Logs tab styles */
+
+/* ── Filter bar ─────────────────────────────────────────── */
+.mopdp-filter-bar {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+.mopdp-app-select {
+    width: 250px;
+    padding: 9px 10px;
+    font-size: 1.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    color: #333;
+}
+.mopdp-app-select:focus {
+    outline: none;
+    border-color: #66afe9;
+    box-shadow: 0 0 4px rgba(102,175,233,.4);
+}
+
+/* ── Logs table ──────────────────────────────────────────── */
+.mopdp-requests-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.mopdp-requests-table th {
+    background: #f5f5f5;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 2px solid #e0e0e0;
+    white-space: nowrap;
+    font-size: 1.7rem;
+    padding: 1.5rem;
+}
+.mopdp-requests-table td {
+    padding: 1.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.mopdp-requests-table tr:last-child td { border-bottom: none; }
+.mopdp-requests-table tr:hover td { background: #fafafa; }
+
+/* Column widths */
+.mopdp-requests-table th:nth-child(1),
+.mopdp-requests-table td:nth-child(1) { width: 60px; }
+.mopdp-requests-table th:nth-child(2),
+.mopdp-requests-table td:nth-child(2) { width: 110px; }
+.mopdp-requests-table th:nth-child(3),
+.mopdp-requests-table td:nth-child(3) { width: 240px; max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
+.mopdp-requests-table th:nth-child(4),
+.mopdp-requests-table td:nth-child(4) { width: 140px; }
+.mopdp-requests-table th:nth-child(5),
+.mopdp-requests-table td:nth-child(5) { width: 80px; }
+.mopdp-requests-table th:nth-child(6),
+.mopdp-requests-table td:nth-child(6) { width: 130px; }
+.mopdp-requests-table th:nth-child(7),
+.mopdp-requests-table td:nth-child(7) { width: auto; }
+
+/* ── Status badges ───────────────────────────────────────── */
+.mopdp-status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.mopdp-status-pending  { background: #fff3cd; color: #856404; }
+.mopdp-status-approved { background: #d1e7dd; color: #0f5132; }
+.mopdp-status-rejected { background: #f8d7da; color: #842029; }
+
+/* ── Pagination ─────────────────────────────────────────── */
+.mopdp-pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+.mopdp-pagination-count {
+    font-size: 1.3rem;
+    color: #555;
+    margin-right: 0.25rem;
+}
