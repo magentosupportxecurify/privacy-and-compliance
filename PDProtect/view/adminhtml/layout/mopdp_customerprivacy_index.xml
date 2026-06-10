@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="mopdp_support"/>
+    <head>
+        <css src="MiniOrange_PDProtect::css/pdprotect.css"/>
+        <script src="MiniOrange_PDProtect::js/pdprotect.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="mopdp.navbar"
+                   template="MiniOrange_PDProtect::Navbar.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MiniOrange\PDProtect\ViewModel\Adminhtml\Configure</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="mopdp.customer_privacy"
+                   template="MiniOrange_PDProtect::CustomerPrivacy/index.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MiniOrange\PDProtect\ViewModel\Adminhtml\Configure</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,136 @@
+/* MiniOrange PDProtect - Confirm Action page (frontend) */
+
+.mopdp-confirm-wrap {
+    max-width: 560px;
+}
+
+/* Back link */
+.mopdp-confirm-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #1979c3;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 1.75rem;
+}
+.mopdp-confirm-back:hover { text-decoration: underline; }
+.mopdp-confirm-back svg { width: 16px; height: 16px; stroke: #1979c3; }
+
+/* Card */
+.mopdp-confirm-card {
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 2rem;
+    background: #fff;
+}
+
+/* Header row: icon + title */
+.mopdp-confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+.mopdp-confirm-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e8f1fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.mopdp-confirm-icon svg { width: 24px; height: 24px; stroke: #1979c3; }
+.mopdp-confirm-title { font-size: 1.6rem; font-weight: 700; color: #111; }
+
+/* Description */
+.mopdp-confirm-desc {
+    font-size: 1.4rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+}
+
+/* Note */
+.mopdp-confirm-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 1.25rem;
+    color: #777;
+    line-height: 1.5;
+    margin-bottom: 1.75rem;
+    padding: 0.85rem 1rem;
+    background: #f0f7ff;
+    border-radius: 8px;
+    border: 1px solid #c7dff5;
+}
+.mopdp-confirm-note svg { width: 16px; height: 16px; stroke: #1979c3; flex-shrink: 0; margin-top: 2px; }
+
+/* Password field */
+.mopdp-confirm-field { margin-bottom: 1.25rem; }
+.mopdp-confirm-label {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+.mopdp-confirm-input {
+    width: 100%;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1.25rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+/* Error */
+.mopdp-confirm-error {
+    display: none;
+    margin-bottom: 1rem;
+    color: #dc3545;
+    font-size: 1.1rem;
+    padding: 0.65rem 0.9rem;
+    background: #fff5f5;
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+}
+
+/* Success */
+.mopdp-confirm-success {
+    display: none;
+    margin-bottom: 1rem;
+    color: #0f5132;
+    font-size: 1.1rem;
+    padding: 0.65rem 0.9rem;
+    background: #d1e7dd;
+    border-radius: 6px;
+    border: 1px solid #badbcc;
+}
+
+/* Submit button */
+.mopdp-confirm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid #1979c3;
+    border-radius: 8px;
+    background: #1979c3;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+.mopdp-confirm-btn:hover:not(:disabled) { background: #006bb4; border-color: #006bb4; }
+.mopdp-confirm-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.mopdp-confirm-btn svg { width: 18px; height: 18px; stroke: #fff; }

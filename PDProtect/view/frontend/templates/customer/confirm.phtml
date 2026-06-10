@@ -1,0 +1,97 @@
+<?php
+/** @var \MiniOrange\PDProtect\Block\Frontend\ConfirmAction $block */
+$action     = $block->getAction();
+$config     = $block->getActionConfig();
+$actionUrl  = $block->getActionUrl();
+$privacyUrl = $block->getPrivacyUrl();
+
+if (!$action || !$config) {
+    echo '<p>' . $block->escapeHtml(__('Invalid action. ')) . '<a href="' . $block->escapeUrl($privacyUrl) . '">' . $block->escapeHtml(__('Go back')) . '</a></p>';
+    return;
+}
+?>
+
+<?php /* Styles for this page are in view/frontend/web/css/confirm.css */ ?>
+
+<div class="mopdp-confirm-wrap">
+
+    <a href="<?= $block->escapeUrl($privacyUrl) ?>" class="mopdp-confirm-back">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <?= $block->escapeHtml(__('Back to Privacy Settings')) ?>
+    </a>
+
+    <div class="mopdp-confirm-card">
+
+        <div class="mopdp-confirm-header">
+            <div class="mopdp-confirm-icon">
+                <?php if ($config['icon'] === 'download'): ?>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-2-2m2 2l2-2"/>
+                </svg>
+                <?php elseif ($config['icon'] === 'anonymize'): ?>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+                </svg>
+                <?php elseif ($config['icon'] === 'delete'): ?>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                <?php else: ?>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.75">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <?php endif; ?>
+            </div>
+            <div class="mopdp-confirm-title"><?= $block->escapeHtml($config['title']) ?></div>
+        </div>
+
+        <p class="mopdp-confirm-desc"><?= $block->escapeHtml($config['description']) ?></p>
+
+        <div class="mopdp-confirm-note">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <?= $block->escapeHtml($config['note']) ?>
+        </div>
+
+        <?php if ($action !== 'withdraw'): ?>
+        <div class="mopdp-confirm-field">
+            <label class="mopdp-confirm-label" for="mopdp-confirm-password">
+                <?= $block->escapeHtml(__('Enter Your Password to Confirm')) ?>
+            </label>
+            <input type="password" id="mopdp-confirm-password" autocomplete="current-password"
+                   class="mopdp-confirm-input"
+                   placeholder="<?= $block->escapeHtmlAttr(__('Your password')) ?>">
+        </div>
+        <?php endif; ?>
+
+        <div id="mopdp-confirm-error" class="mopdp-confirm-error"></div>
+        <div id="mopdp-confirm-success" class="mopdp-confirm-success"></div>
+
+        <button type="button" id="mopdp-confirm-btn" class="mopdp-confirm-btn" onclick="mopdpConfirmAction()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            <?= $block->escapeHtml($config['button']) ?>
+        </button>
+
+    </div>
+</div>
+
+<script>
+window.mopdpConfirmConfig = {
+    action:          '<?= $block->escapeJs($action) ?>',
+    actionUrl:       '<?= $block->escapeJs($actionUrl) ?>',
+    privacyUrl:      '<?= $block->escapeJs($privacyUrl) ?>',
+    downloadServeUrl: '<?= $block->escapeJs($block->getDownloadServeUrl()) ?>',
+    msgPassword:     '<?= $block->escapeJs(__('Please enter your password.')) ?>',
+    msgUnexpected:   '<?= $block->escapeJs(__('An unexpected error occurred.')) ?>',
+    msgError:        '<?= $block->escapeJs(__('An error occurred. Please try again.')) ?>',
+    msgDownloadReady: '<?= $block->escapeJs(__('Your data is ready. The file download will begin shortly.')) ?>',
+    msgSuccess:      '<?= $block->escapeJs(__('Action completed successfully.')) ?>'
+};
+</script>

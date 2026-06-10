@@ -1,0 +1,239 @@
+<?php
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$viewModel        = $this->getViewModel();
+$formKey          = $this->getBlockHtml('formkey');
+$saveUrl          = $viewModel->getTabUrl('customerprivacy');
+$tabName          = $viewModel->getCustomerPrivacyTabName();
+$showPrivacy      = $viewModel->getShowPrivacyPolicy();
+$privacyUrl       = $viewModel->getPrivacyPolicyUrl();
+$showCookie       = $viewModel->getShowCookiePolicy();
+$cookieUrl        = $viewModel->getCookiePolicyUrl();
+$dataDownload     = $viewModel->getEnableDataDownload();
+$anonymize        = $viewModel->getEnableAnonymize();
+$deleteAccount    = $viewModel->getEnableDeleteAccount();
+$optOut           = $viewModel->getEnableOptOut();
+$dpoInfo          = $viewModel->getEnableDpoInfo();
+$dpoName          = $viewModel->getDpoName();
+$dpoEmail         = $viewModel->getDpoEmail();
+$dpoPhone         = $viewModel->getDpoPhone();
+$isPremium        = $viewModel->isPremium();
+$upgradeUrl       = $viewModel->getUpgradeUrl();
+?>
+
+<div class="mopdp-main-content">
+<div class="mopdp-container">
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('Customer Account Privacy')) ?></div>
+
+    <form method="post" action="<?= $this->escapeUrl($saveUrl) ?>" id="mopdp-customer-privacy-form">
+        <?= /* @noEscape */ $formKey ?>
+
+        <!-- Privacy Tab Settings Panel -->
+        <div class="mopdp-panel">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title"><?= $this->escapeHtml(__('Privacy Tab Settings')) ?></div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Configure the Privacy Settings tab shown in the customer account area')) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Privacy Settings Tab Name')) ?></label>
+                    <div class="form-field">
+                        <input type="text" name="tab_name" id="tab_name"
+                               class="mopdp-input"
+                               value="<?= $this->escapeHtmlAttr($tabName) ?>"
+                               placeholder="<?= $this->escapeHtmlAttr(__('Privacy Settings')) ?>">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- List Policies Panel -->
+        <div class="mopdp-panel" style="margin-top: 2rem;">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title"><?= $this->escapeHtml(__('List Policies')) ?></div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__("Choose which policy links to display on the customer's Privacy Settings page")) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Privacy Policy')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="show_privacy_policy" id="show_privacy_policy" value="1"
+                                   <?= $showPrivacy ? 'checked' : '' ?>
+                                   onchange="mopdpToggle(this, 'mopdp-privacy-url-row')">
+                            <?= $this->escapeHtml(__('Show Privacy Policy link')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row" id="mopdp-privacy-url-row" style="<?= !$showPrivacy ? 'display:none;' : '' ?>">
+                    <label class="form-label"><?= $this->escapeHtml(__('Privacy Policy URL')) ?></label>
+                    <div class="form-field">
+                        <input type="text" name="privacy_policy_url" id="privacy_policy_url"
+                               class="mopdp-input"
+                               value="<?= $this->escapeHtmlAttr($privacyUrl) ?>"
+                               placeholder="<?= $this->escapeHtmlAttr(__('https://yourstore.com/privacy-policy')) ?>">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Cookie Policy')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="show_cookie_policy" id="show_cookie_policy" value="1"
+                                   <?= $showCookie ? 'checked' : '' ?>
+                                   onchange="mopdpToggle(this, 'mopdp-cookie-url-row')">
+                            <?= $this->escapeHtml(__('Show Cookie Policy link')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row" id="mopdp-cookie-url-row" style="<?= !$showCookie ? 'display:none;' : '' ?>">
+                    <label class="form-label"><?= $this->escapeHtml(__('Cookie Policy URL')) ?></label>
+                    <div class="form-field">
+                        <input type="text" name="cookie_policy_url" id="cookie_policy_url"
+                               class="mopdp-input"
+                               value="<?= $this->escapeHtmlAttr($cookieUrl) ?>"
+                               placeholder="<?= $this->escapeHtmlAttr(__('https://yourstore.com/cookie-policy')) ?>">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Customer Data Controls Panel (locked in free) -->
+        <div class="mopdp-panel" style="margin-top: 2rem; <?= !$isPremium ? 'opacity:0.7;' : '' ?>">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title">
+                        <?= $this->escapeHtml(__('Customer Data Controls')) ?>
+                        <?php if (!$isPremium): ?>
+                            <small style="color:red"><a style="color:red; font-weight: 700;" href="' . $this->escapeUrl($upgradeUrl) . '"
+                            class="premium premium-btn-link">[PREMIUM]</a></small>
+                        <?php endif; ?>
+                    </div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Enable self-service data management options for your customers')) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Personal Data Download')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="enable_data_download" id="enable_data_download" value="1"
+                                   checked <?= !$isPremium ? 'disabled' : ($dataDownload ? '' : '') ?>>
+                            <?= $this->escapeHtml(__('Allow customers to download their personal data')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Anonymize Personal Data')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="enable_anonymize" id="enable_anonymize" value="1"
+                                   checked <?= !$isPremium ? 'disabled' : ($anonymize ? '' : '') ?>>
+                            <?= $this->escapeHtml(__('Allow customers to anonymize their personal data')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Delete Account')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="enable_delete_account" id="enable_delete_account" value="1"
+                                   checked <?= !$isPremium ? 'disabled' : ($deleteAccount ? '' : '') ?>>
+                            <?= $this->escapeHtml(__('Allow customers to delete their account')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Opt Out from Consent')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="enable_opt_out" id="enable_opt_out" value="1"
+                                   checked <?= !$isPremium ? 'disabled' : ($optOut ? '' : '') ?>>
+                            <?= $this->escapeHtml(__('Allow customers to withdraw their consent')) ?>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Data Protection Officer Panel -->
+        <div class="mopdp-panel" style="margin-top: 2rem;">
+            <div class="mopdp-panel-header">
+                <div class="mopdp-panel-title-container">
+                    <div class="mopdp-panel-title"><?= $this->escapeHtml(__('Data Protection Officer')) ?></div>
+                    <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__("Optionally display your DPO contact details on the customer's privacy page")) ?></div>
+                </div>
+            </div>
+            <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Display DPO Info')) ?></label>
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" class="custom-checkbox" name="enable_dpo_info" id="enable_dpo_info" value="1"
+                                   <?= $dpoInfo ? 'checked' : '' ?>
+                                   onchange="mopdpToggle(this, 'mopdp-dpo-fields')">
+                            <?= $this->escapeHtml(__('Show Data Protection Officer contact information')) ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="mopdp-dpo-fields" style="<?= !$dpoInfo ? 'display:none;' : '' ?>">
+                    <div class="form-row">
+                        <label class="form-label"><?= $this->escapeHtml(__('DPO Name')) ?></label>
+                        <div class="form-field">
+                            <input type="text" name="dpo_name" id="dpo_name"
+                                   class="mopdp-input"
+                                   value="<?= $this->escapeHtmlAttr($dpoName) ?>"
+                                   placeholder="<?= $this->escapeHtmlAttr(__('Jane Doe')) ?>">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label"><?= $this->escapeHtml(__('DPO Email')) ?></label>
+                        <div class="form-field">
+                            <input type="email" name="dpo_email" id="dpo_email"
+                                   class="mopdp-input"
+                                   value="<?= $this->escapeHtmlAttr($dpoEmail) ?>"
+                                   placeholder="<?= $this->escapeHtmlAttr(__('dpo@yourstore.com')) ?>">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label class="form-label"><?= $this->escapeHtml(__('DPO Phone')) ?></label>
+                        <div class="form-field">
+                            <input type="text" name="dpo_phone" id="dpo_phone"
+                                   class="mopdp-input"
+                                   value="<?= $this->escapeHtmlAttr($dpoPhone) ?>"
+                                   placeholder="<?= $this->escapeHtmlAttr(__('+1 555 000 0000')) ?>">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div style="margin-top: 2rem; margin-bottom: 3rem;">
+            <button type="submit" class="btn btn-primary">
+                <?= $this->escapeHtml(__('Save Settings')) ?>
+            </button>
+        </div>
+
+    </form>
+</div>
+</div>
+
+<?php /* mopdpToggle() is defined in view/adminhtml/web/js/pdprotect.js */ ?>

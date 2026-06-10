@@ -1,0 +1,96 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+$viewModel = $block->getData('view_model');
+/** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+$iconUrl   = $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/icon_mo.png');
+$submitUrl = $viewModel->getSupportSubmitUrl();
+?>
+
+<?php /* Styles for this widget are in view/adminhtml/web/css/support.css */ ?>
+<?php /* JS logic is in view/adminhtml/web/js/support.js */ ?>
+
+<!-- Floating miniOrange support icon -->
+<button type="button" id="mopdp-support-icon" class="mopdp-support-icon" title="Contact miniOrange Support">
+    <img src="<?= $block->escapeUrl($iconUrl) ?>" alt="miniOrange Support">
+</button>
+
+<!-- Okta-style help bubble -->
+<div id="mopdp-help-tooltip" class="mopdp-help-container">
+    <span class="mopdp-span1">
+        <div class="mopdp-need">
+            <span class="mopdp-span2"></span>
+            <div class="mopdp-div11">
+                <div class="mopdp-div12">
+                    <span>Hello there!</span><br>
+                    <p class="mopdp-helpline">Need Help? Drop us an email!</p>
+                </div>
+            </div>
+        </div>
+    </span>
+</div>
+
+<!-- Slide-up support panel -->
+<div id="mopdp-support-form" class="mopdp-support-form">
+
+    <!-- Header -->
+    <div class="mopdp-support-form-head">
+        <p class="mopdp-support-form-head-title"><?= $block->escapeHtml(__('miniOrange Support')) ?></p>
+        <span id="mopdp-support-close" class="mopdp-support-close-btn">&#10006;</span>
+    </div>
+
+    <!-- Form body -->
+    <div class="mopdp-support-form-body" id="mopdp-support-form-body">
+
+        <div class="mopdp-support-field">
+            <label class="mopdp-support-label" for="mopdp-support-email">
+                <?= $block->escapeHtml(__('Contact E-mail')) ?>
+                <span class="mopdp-required">*</span>
+            </label>
+            <input type="email" id="mopdp-support-email" class="mopdp-support-input"
+                   placeholder="<?= $block->escapeHtmlAttr(__('Enter valid email')) ?>"
+                   autocomplete="email">
+        </div>
+
+        <div class="mopdp-support-field">
+            <label class="mopdp-support-label" for="mopdp-support-phone">
+                <?= $block->escapeHtml(__('Contact Phone')) ?>
+                <span class="mopdp-support-optional"><?= $block->escapeHtml(__('(Optional)')) ?></span>
+            </label>
+            <input type="tel" id="mopdp-support-phone" class="mopdp-support-input"
+                   placeholder="<?= $block->escapeHtmlAttr(__('Enter valid phone number with country code')) ?>"
+                   autocomplete="tel">
+        </div>
+
+        <div class="mopdp-support-field">
+            <label class="mopdp-support-label" for="mopdp-support-query">
+                <?= $block->escapeHtml(__('How can we help you?')) ?>
+                <span class="mopdp-required">*</span>
+            </label>
+            <textarea id="mopdp-support-query" class="mopdp-support-textarea"
+                      placeholder="<?= $block->escapeHtmlAttr(__('Enter your query here. We will get back to you as soon as possible via email.')) ?>"></textarea>
+        </div>
+
+        <div id="mopdp-support-error" class="mopdp-support-error"></div>
+
+        <button type="button" id="mopdp-support-submit" class="mopdp-support-submit-btn">
+            <?= $block->escapeHtml(__('Submit')) ?>
+        </button>
+
+    </div>
+
+    <!-- Success state -->
+    <div id="mopdp-success-msg" class="mopdp-success-msg">
+        <div class="mopdp-success-msg-icon">&#9989;</div>
+        <div class="mopdp-success-msg-title"><?= $block->escapeHtml(__('Thanks for your inquiry.')) ?></div>
+        <p class="mopdp-success-msg-text">
+            <?= $block->escapeHtml(__('We will get back shortly via email. If you don\'t hear from us within 24 hours, please send a follow-up email to magentosupport@xecurify.com.')) ?>
+        </p>
+    </div>
+
+</div>
+
+<script>
+window.MOPDP_Support = {
+    submitUrl: '<?= $block->escapeJs($submitUrl) ?>'
+};
+</script>

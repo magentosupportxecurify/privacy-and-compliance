@@ -1,0 +1,48 @@
+<?php
+/** @var \MiniOrange\PDProtect\Block\Frontend\PrivacyPopup $block */
+if (!$block->isPopupEnabled() || !$block->shouldShowForCountry() || !empty($_COOKIE['mopdp_consent'])) {
+    return;
+}
+?>
+<div id="mopdp-privacy-popup" class="mopdp-popup-wrap" style="display:none;" aria-modal="true" role="dialog" aria-labelledby="mopdp-popup-title">
+    <div class="mopdp-popup-overlay" id="mopdp-popup-overlay"></div>
+    <div class="mopdp-popup-box">
+        <button id="mopdp-close-btn" class="mopdp-popup-close" type="button" aria-label="Close">&#x00D7;</button>
+        <div class="mopdp-popup-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="52" height="52">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 14c-2.67 0-5.05-1.31-6.51-3.33C6.87 14.06 9.3 13 12 13s5.13 1.06 6.51 2.67C17.05 17.69 14.67 19 12 19z"/>
+            </svg>
+        </div>
+        <h2 id="mopdp-popup-title" class="mopdp-popup-title">Privacy Policy</h2>
+        <p class="mopdp-popup-body">
+            <strong>What personal data do we collect from you?</strong><br>
+            We collect personal data when you create an account, place an order, or interact with our services. This includes information you provide voluntarily through contact forms, newsletter subscriptions, product reviews, and customer support requests. We also collect technical data automatically through cookies and similar tracking technologies during your use of our website.<br>
+            When you complete a purchase on our platform, we collect the following information: full name, email address, shipping and billing address, payment details, and business information such as company name and VAT/Tax identification number. This data is necessary to fulfill our contractual obligations, process transactions, issue invoices, and maintain required financial records. All data is retained in compliance with applicable legal requirements.<br><br>
+            <strong>How do we use your personal data?</strong><br>
+            We use your personal data to process and manage your orders, maintain your account, and communicate essential updates regarding order confirmation, payment status, and delivery tracking. With your consent, we may also send you information about new products, promotions, and services that may be relevant to your interests.<br>
+            Data collected through our website may be used to enhance and personalize your browsing experience on return visits. Where you have provided explicit consent, we may share your information with trusted service providers and fulfillment partners solely for the purpose of delivering the products and services you have purchased.<br><br>
+            We do not sell, rent, or share your personal data with third parties for their own marketing purposes.<br><br>
+            To protect against fraudulent transactions, we may process your information through third-party fraud detection and prevention services during order processing.<br><br>
+            <strong>How long do we retain your data?</strong><br>
+            We retain your personal data, including your name, email address, and account information, for as long as your account remains active or as needed to provide you with our products and services. Retaining this data allows you to access updates, manage your purchases, and contact our support team when required.<br><br>
+            Billing and financial records are retained for the period prescribed by applicable tax and accounting regulations, and may also be retained where necessary for legal proceedings or dispute resolution.<br><br>
+            If you wish to have your personal data deleted, corrected, or updated, please reach out to us directly using the contact details provided on our website. Requests will be handled in accordance with applicable data protection laws.<br><br>
+            <strong>Your rights regarding your personal data</strong><br>
+            Depending on your jurisdiction, you may have the right to access, rectify, or erase your personal data, restrict or object to its processing, and request data portability. You may also withdraw any previously given consent at any time without affecting the lawfulness of processing carried out prior to withdrawal.
+            Cookies and tracking technologies
+            Our website uses cookies to improve functionality and analyze usage patterns. You may configure your browser settings to refuse cookies; however, doing so may affect certain features of our website. For full details on how we use cookies, please refer to our Cookie Policy.
+            Changes to this Privacy Policy
+            We reserve the right to update this Privacy Policy periodically to reflect changes in our practices or legal obligations. Any updates will be published on this page with a revised effective date. We encourage you to review this policy regularly.
+        </p>
+        <div class="mopdp-popup-actions">
+            <button id="mopdp-accept-btn" class="mopdp-popup-btn mopdp-popup-btn-accept" type="button">
+                Accept
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.mopdpConfig = <?= /* @noEscape */ $block->getPopupConfigJson() ?>;
+</script>
+<script type="text/javascript" src="<?= $block->escapeUrl($block->getViewFileUrl('MiniOrange_PDProtect::js/privacy_popup.js')) ?>"></script>
