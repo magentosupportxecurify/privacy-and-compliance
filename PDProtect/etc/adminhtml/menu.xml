@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MiniOrange_PDProtect::pdprotect"
+             title="Personal Data Protection"
+             module="MiniOrange_PDProtect"
+             sortOrder="53"
+             resource="MiniOrange_PDProtect::pdprotect"/>
+
+        <add id="MiniOrange_PDProtect::general_settings"
+             title="General Settings"
+             module="MiniOrange_PDProtect"
+             sortOrder="10"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/generalsettings/index"
+             resource="MiniOrange_PDProtect::general_settings"/>
+
+        <add id="MiniOrange_PDProtect::customer_privacy"
+             title="Customer Account Privacy"
+             module="MiniOrange_PDProtect"
+             sortOrder="20"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/customerprivacy/index"
+             resource="MiniOrange_PDProtect::customer_privacy"/>
+
+        <add id="MiniOrange_PDProtect::data_deletion"
+             title="Delete Requests"
+             module="MiniOrange_PDProtect"
+             sortOrder="30"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/datadeletion/index"
+             resource="MiniOrange_PDProtect::data_deletion"/>
+
+        <add id="MiniOrange_PDProtect::datadeletionconfig"
+             title="Data Deletion &amp; Anonymization"
+             module="MiniOrange_PDProtect"
+             sortOrder="35"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/datadeletionconfig/index"
+             resource="MiniOrange_PDProtect::datadeletionconfig"/>
+
+        <add id="MiniOrange_PDProtect::consentlogs"
+             title="Consent Logs"
+             module="MiniOrange_PDProtect"
+             sortOrder="40"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/consentlogs/index"
+             resource="MiniOrange_PDProtect::consentlogs"/>
+
+        <add id="MiniOrange_PDProtect::upgrade"
+             title="Upgrade"
+             module="MiniOrange_PDProtect"
+             sortOrder="50"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/upgrade/index"
+             resource="MiniOrange_PDProtect::upgrade"/>
+    </menu>
+</config>
