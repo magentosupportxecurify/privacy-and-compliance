@@ -1,0 +1,37 @@
+{
+    "name": "miniorange_inc/miniorange-magento-pdprotect",
+    "description":"Personal Data Protection for Magento/Adobe Commerce is a comprehensive extension designed to help store owners comply with global data protection regulations such as GDPR, CCPA, and DPDP. This extension provides robust features for managing and protecting customer data, including consent management, data access requests, and secure data handling practices. With Personal Data Protection for Magento/Adobe Commerce, you can ensure that your store meets the highest standards of privacy and data security while providing a seamless shopping experience for your customers.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": ["Commercial"],
+    "keywords": [
+        "Magento 2",
+        "adobe commerce",
+        "Personal Data Protection",
+        "privacy",
+        "DPDPA",
+        "GDPR",
+        "CCPA",
+        "privacy consent",
+        "Privacy Policy"    
+    ],
+    "authors": [
+        {
+            "name": "miniOrange",
+            "email": "magentosupport@xecurify.com"
+        }
+    ],
+    "support": {
+        "email": "magentosupport@xecurify.com"
+    },
+    "require": {
+        "php": "~7||~8",
+        "geoip2/geoip2": "^3.0"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": {
+            "MiniOrange\\PDProtect\\": ""
+        }
+    }
+}
