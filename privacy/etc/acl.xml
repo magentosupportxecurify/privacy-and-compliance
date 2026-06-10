@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="MiniOrange_Privacy::Privacy" title="Privacy Suite" sortOrder="57">
+                    <resource id="MiniOrange_Privacy::cookie_consent" title="Cookie Consent" sortOrder="10"/>
+                    <resource id="MiniOrange_Privacy::pdprotect" title="Personal Data Protection" sortOrder="20"/>
+                    <resource id="MiniOrange_Privacy::upgrade" title="Upgrade" sortOrder="30"/>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
