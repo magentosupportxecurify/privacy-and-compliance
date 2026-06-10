@@ -1,0 +1,223 @@
+/**
+ * Floating support FAB + popup (aligned with Customer Segmentation admin widget).
+ */
+
+.help-container {
+    box-sizing: border-box;
+    outline: none;
+    -webkit-font-smoothing: antialiased;
+    color: #1e2c38;
+    font-size: 17px;
+    width: 196px;
+    bottom: 25px;
+    position: fixed;
+    right: 6.5%;
+    z-index: 10;
+    display: none;
+}
+
+.span1 {
+    flex: none;
+    box-sizing: border-box;
+    outline: none;
+    display: block;
+}
+
+.need {
+    cursor: pointer;
+    position: relative;
+    color: #1e2c38;
+    background: #fff;
+    border-radius: 0.625rem;
+    box-shadow: 0 2px 6px 0 rgba(120, 111, 111, 0.4);
+}
+
+.div11 {
+    overflow: hidden;
+    position: relative;
+    border-radius: inherit;
+}
+
+.div12 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 1rem;
+    max-width: 100%;
+    font-size: 1.5rem;
+    white-space: normal;
+}
+
+.helpline {
+    font-size: 0.9em;
+    color: #1e2c38;
+    margin-top: 8px;
+}
+
+.span2 {
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    right: -10px;
+    bottom: 10px;
+    background-color: inherit;
+    z-index: -1;
+    transform: translateX(-6px) rotate(45deg);
+    pointer-events: none;
+    box-shadow: 2px -2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.support-icon {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    display: flex;
+    background: #ffffff;
+    padding: 2px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    background-color: #fbf6e599;
+}
+
+.support-icon i {
+    font-size: 24px;
+    color: #3498db;
+}
+
+.support-form {
+    position: fixed;
+    bottom: 11px;
+    right: 92px;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1001;
+}
+
+.support-form-head {
+    background: black;
+    color: white;
+    padding: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+}
+
+.support-form-head p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.close-btn {
+    cursor: pointer;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.support-form form {
+    padding: 1.3rem;
+    font-size: 1.2rem;
+    height: 33rem;
+}
+
+.support-form label {
+    font-weight: 600;
+    color: #6b778c;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 1.2rem;
+}
+
+.support-form input,
+.support-form textarea,
+.support-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    background: white;
+    color: black;
+    box-sizing: border-box;
+}
+
+.support-form input::placeholder,
+.support-form textarea::placeholder {
+    color: #a4b0be;
+}
+
+.support-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M10.3 3.3L6 7.6 1.7 3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l5 5c.4.4 1 .4 1.4 0l5-5c.4-.4.4-1 0-1.4s-1-.4-1.4 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.support-form button {
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.paragraph {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.support-icon-img {
+    width: 61px;
+    border-radius: 50%;
+}
+
+.successMessage {
+    display: none;
+    text-align: center;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: 1.5rem;
+}
+
+.InvalidEmailMessage {
+    display: none;
+    text-align: center;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: 1.5rem;
+}
+
+.ErrorMessage {
+    display: none;
+    text-align: center;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: 1.5rem;
+}
+
+.right_image {
+    font-size: 3rem;
+}

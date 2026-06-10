@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <miniorange>
+            <CookieConsent>
+                <general>
+                    <enabled>1</enabled>
+                    <position>bottom</position>
+                    <banner_title>We use cookies</banner_title>
+                    <banner_body>We use cookies to improve your experience. Choose your preferences below.</banner_body>
+                    <privacy_url>/privacy-policy</privacy_url>
+                </general>
+                <script_manager>
+                    <enabled>1</enabled>
+                    <custom_patterns></custom_patterns>
+                    <discovered_map></discovered_map>
+                </script_manager>
+            </CookieConsent>
+        </miniorange>
+    </default>
+</config>
