@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MiniOrange_Privacy::Privacy"
+             title="Privacy and Compliance Manager"
+             module="MiniOrange_Privacy"
+             sortOrder="57"
+             resource="MiniOrange_Privacy::Privacy"/>
+
+        <add id="MiniOrange_Privacy::cookie_consent"
+             title="Cookie Consent"
+             module="MiniOrange_Privacy"
+             sortOrder="10"
+             parent="MiniOrange_Privacy::Privacy"
+             action="moprivacy/redirect/index/module/cookieconsent"
+             resource="MiniOrange_Privacy::cookie_consent"/>
+
+        <add id="MiniOrange_Privacy::pdprotect"
+             title="Personal Data Protection"
+             module="MiniOrange_Privacy"
+             sortOrder="20"
+             parent="MiniOrange_Privacy::Privacy"
+             action="moprivacy/redirect/index/module/pdprotect"
+             resource="MiniOrange_Privacy::pdprotect"/>
+
+        <add id="MiniOrange_Privacy::upgrade"
+             title="Upgrade"
+             module="MiniOrange_Privacy"
+             sortOrder="30"
+             parent="MiniOrange_Privacy::Privacy"
+             action="moprivacy/upgrade/index"
+             resource="MiniOrange_Privacy::upgrade"/>
+    </menu>
+</config>
