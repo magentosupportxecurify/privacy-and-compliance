@@ -1,0 +1,118 @@
+<?php
+/**
+ * @var \MiniOrange\CookieConsent\Block\Banner $block
+ */
+if (!$block->isEnabled()) {
+    return;
+}
+$config = $block->getBannerConfig();
+?>
+<div id="mo-cookie-banner"
+     class="vcc-banner vcc-banner--<?= $block->escapeHtmlAttr($config['position'] ?? 'bottom') ?>"
+     role="dialog"
+     aria-live="polite"
+     aria-label="<?= $block->escapeHtmlAttr(__('Cookie Consent')) ?>"
+     style="display:block;">
+    <div class="vcc-banner__inner">
+        <div class="vcc-banner__text-group">
+            <span class="vcc-banner__icon" aria-hidden="true">&#127850;</span>
+            <div>
+                <p class="vcc-banner__title"><?= $block->escapeHtml($block->getBannerTitle()) ?></p>
+                <p class="vcc-banner__body">
+                    <?= $block->escapeHtml($block->getBannerBody()) ?>
+                    <a href="<?= $block->escapeUrl($block->getPrivacyUrl()) ?>" class="vcc-banner__link"><?= $block->escapeHtml(__('Privacy Policy')) ?></a>
+                </p>
+            </div>
+        </div>
+        <div class="vcc-banner__actions">
+            <button class="vcc-btn vcc-btn--ghost" data-action="customize" type="button"><?= $block->escapeHtml(__('Customize Cookies')) ?></button>
+            <button class="vcc-btn vcc-btn--outline" data-action="reject-all" type="button"><?= $block->escapeHtml(__('Reject All')) ?></button>
+            <button class="vcc-btn vcc-btn--primary" data-action="accept-all" type="button"><?= $block->escapeHtml(__('Accept All')) ?></button>
+        </div>
+    </div>
+</div>
+
+<div id="mo-cookie-customize-modal" class="vcc-modal" role="dialog" aria-modal="true"
+     aria-labelledby="mo-cookie-customize-title" style="display:none;">
+    <div class="vcc-modal__backdrop"></div>
+    <div class="vcc-modal__box">
+        <div class="vcc-modal__header">
+            <h2 class="vcc-modal__title" id="mo-cookie-customize-title"><?= $block->escapeHtml(__('Customize Cookie Preferences')) ?></h2>
+            <button class="vcc-modal__close" type="button" aria-label="<?= $block->escapeHtmlAttr(__('Close')) ?>">&#x2715;</button>
+        </div>
+        <div class="vcc-modal__body">
+            <div class="vcc-category">
+                <div class="vcc-category__info">
+                    <span class="vcc-category__name"><?= $block->escapeHtml(__('Necessary')) ?></span>
+                    <span class="vcc-category__desc"><?= $block->escapeHtml(__('Essential for the website to function. Cannot be disabled.')) ?></span>
+                </div>
+                <label class="vcc-toggle vcc-toggle--locked">
+                    <input type="checkbox" checked disabled>
+                    <span class="vcc-toggle__track"></span>
+                </label>
+            </div>
+            <div class="vcc-category">
+                <div class="vcc-category__info">
+                    <span class="vcc-category__name"><?= $block->escapeHtml(__('Analytics')) ?></span>
+                    <span class="vcc-category__desc"><?= $block->escapeHtml(__('Help us understand how visitors interact with the website.')) ?></span>
+                </div>
+                <label class="vcc-toggle">
+                    <input type="checkbox" data-category="analytics">
+                    <span class="vcc-toggle__track"></span>
+                </label>
+            </div>
+            <div class="vcc-category">
+                <div class="vcc-category__info">
+                    <span class="vcc-category__name"><?= $block->escapeHtml(__('Functional')) ?></span>
+                    <span class="vcc-category__desc"><?= $block->escapeHtml(__('Enable enhanced functionality and personalisation features.')) ?></span>
+                </div>
+                <label class="vcc-toggle">
+                    <input type="checkbox" data-category="functional">
+                    <span class="vcc-toggle__track"></span>
+                </label>
+            </div>
+            <div class="vcc-category">
+                <div class="vcc-category__info">
+                    <span class="vcc-category__name"><?= $block->escapeHtml(__('Marketing')) ?></span>
+                    <span class="vcc-category__desc"><?= $block->escapeHtml(__('Used to deliver personalised advertisements.')) ?></span>
+                </div>
+                <label class="vcc-toggle">
+                    <input type="checkbox" data-category="marketing">
+                    <span class="vcc-toggle__track"></span>
+                </label>
+            </div>
+        </div>
+        <div class="vcc-modal__footer">
+            <button class="vcc-btn vcc-btn--ghost" type="button" data-modal-action="cancel"><?= $block->escapeHtml(__('Cancel')) ?></button>
+            <button class="vcc-btn vcc-btn--primary" type="button" data-modal-action="save"><?= $block->escapeHtml(__('Save Preferences')) ?></button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function (storageKey) {
+    'use strict';
+    try {
+        if (window.localStorage.getItem(storageKey)) {
+            return;
+        }
+    } catch (e) {
+        return;
+    }
+    var el = document.getElementById('mo-cookie-banner');
+    if (!el) {
+        return;
+    }
+    setTimeout(function () {
+        el.classList.add('is-visible');
+    }, 400);
+})(<?= /* @noEscape */ json_encode($block->getConsentStorageKey(), JSON_THROW_ON_ERROR) ?>);
+</script>
+
+<script type="text/x-magento-init">
+{
+    "#mo-cookie-banner": {
+        "MiniOrange_CookieConsent/js/consent-banner": <?= /* @noEscape */ $block->getBannerConfigJson() ?>
+    }
+}
+</script>

@@ -1,0 +1,30 @@
+<?php
+/**
+ * Shell: tab navigation + active tab content.
+ *
+ * @var \MiniOrange\CookieConsent\Block\Adminhtml\Config $block
+ */
+$activeTab = $block->getActiveTab();
+$writePluginInstallation = $block->writePluginInstallation($activeTab);
+?>
+<div class="mo-privacy-wrapper">
+
+    <div class="topnav" id="moPrivacyTopnav">
+        <a class="nav-tab <?= $activeTab === 'banner_settings' ? 'active' : '' ?>"
+           href="<?= $block->escapeUrl($block->getUrl('mocookieconsent/general/index')) ?>">
+            <?= $block->escapeHtml(__('Banner Settings')) ?>
+        </a>
+        <a class="nav-tab <?= $activeTab === 'script_manager' ? 'active' : '' ?>"
+           href="<?= $block->escapeUrl($block->getUrl('mocookieconsent/scriptmanager/index')) ?>">
+            <?= $block->escapeHtml(__('Script Manager')) ?>
+        </a>
+        <a class="nav-tab <?= $activeTab === 'upgrade' ? 'active' : '' ?>"
+           href="<?= $block->escapeUrl($block->getUrl('mocookieconsent/upgrade/index')) ?>">
+            <?= $block->escapeHtml(__('Upgrade')) ?>
+        </a>
+    </div>
+
+    <div class="mo-content-area">
+        <?= /* @noEscape */ $block->getChildHtml($block->getTabChildName()) ?>
+    </div>
+</div>

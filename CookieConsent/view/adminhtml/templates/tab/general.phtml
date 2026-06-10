@@ -1,0 +1,109 @@
+<?php
+/**
+ * @var \MiniOrange\CookieConsent\Block\Adminhtml\Config $block
+ */
+$saveUrl = $block->getSaveUrl();
+?>
+<div class="mo-tab-content">
+    <div class="mo-main-column">
+        <form method="post" action="<?= $block->escapeUrl($saveUrl) ?>" id="mo-privacy-form-general">
+            <?= /* @noEscape */ $block->getFormKeyHtml() ?>
+            <input type="hidden" name="active_tab" value="banner_settings"/>
+
+            <div class="mo-card">
+                <div class="mo-card__header">
+                    <h2 class="mo-card__title"><?= $block->escapeHtml(__('Cookie Consent Banner')) ?></h2>
+                    <p class="mo-card__subtitle"><?= $block->escapeHtml(__('Show the cookie consent banner to site visitors. Disable to turn off the entire banner feature.')) ?></p>
+                </div>
+                <div class="mo-card__body">
+                    <div class="mo-field mo-field--toggle">
+                        <label class="mo-label" for="general_enabled">
+                            <?= $block->escapeHtml(__('Enable Cookie Banner')) ?>
+                        </label>
+                        <div class="mo-field__control">
+                            <label class="mo-toggle">
+                                <input type="checkbox"
+                                       id="general_enabled"
+                                       name="general[enabled]"
+                                       value="1"
+                                       <?= $block->isEnabled('general/enabled') ? 'checked="checked"' : '' ?>/>
+                                <span class="mo-toggle__slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mo-card">
+                <div class="mo-card__header">
+                    <h2 class="mo-card__title"><?= $block->escapeHtml(__('Banner Display')) ?></h2>
+                    <p class="mo-card__subtitle"><?= $block->escapeHtml(__('Customise the cookie consent banner shown to site visitors.')) ?></p>
+                </div>
+                <div class="mo-card__body">
+                    <div class="mo-field">
+                        <label class="mo-label" for="general_position"><?= $block->escapeHtml(__('Banner Position')) ?></label>
+                        <div class="mo-field__control">
+                            <select id="general_position" name="general[position]" class="mo-select">
+                                <?php
+                                $positions = [
+                                    'top' => __('Top of page'),
+                                    'bottom' => __('Bottom of page'),
+                                    'bottom-left' => __('Bottom left corner'),
+                                    'bottom-right' => __('Bottom right corner'),
+                                ];
+                                $current = $block->getConfigValue('general/position', 'bottom');
+                                foreach ($positions as $val => $label) :
+                                    ?>
+                                    <option value="<?= $block->escapeHtmlAttr($val) ?>"
+                                        <?= $current === $val ? 'selected="selected"' : '' ?>>
+                                        <?= $block->escapeHtml($label) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mo-field">
+                        <label class="mo-label" for="general_banner_title"><?= $block->escapeHtml(__('Banner Title')) ?></label>
+                        <div class="mo-field__control">
+                            <input type="text"
+                                   id="general_banner_title"
+                                   name="general[banner_title]"
+                                   class="mo-input"
+                                   placeholder="<?= $block->escapeHtmlAttr(__('We Respect Your Privacy')) ?>"
+                                   value="<?= $block->escapeHtmlAttr($block->getConfigValue('general/banner_title', 'We use cookies')) ?>"/>
+                        </div>
+                    </div>
+
+                    <div class="mo-field">
+                        <label class="mo-label" for="general_banner_body"><?= $block->escapeHtml(__('Banner Body Text')) ?></label>
+                        <div class="mo-field__control">
+                            <textarea id="general_banner_body"
+                                      name="general[banner_body]"
+                                      class="mo-textarea"
+                                      rows="4"><?= $block->escapeHtml($block->getConfigValue('general/banner_body', 'We use cookies to improve your experience. Choose your preferences below.')) ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mo-field">
+                        <label class="mo-label" for="general_privacy_url"><?= $block->escapeHtml(__('Privacy Policy URL')) ?></label>
+                        <div class="mo-field__control">
+                            <input type="text"
+                                   id="general_privacy_url"
+                                   name="general[privacy_url]"
+                                   class="mo-input"
+                                   placeholder="https://..."
+                                   value="<?= $block->escapeHtmlAttr($block->getConfigValue('general/privacy_url', '')) ?>"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mo-actions">
+                <button type="submit" class="mo-btn mo-btn--primary">
+                    <?= $block->escapeHtml(__('Save')) ?>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

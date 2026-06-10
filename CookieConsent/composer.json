@@ -1,0 +1,39 @@
+{
+    "name": "miniorange_inc/cookie-consent",
+    "description": "miniOrange Cookie Consent GDPR, DPDP, CCPA Extension for Magento/adobe commerce is built for store owners who need a single, dependable solution to manage visitor consent across multiple privacy frameworks. Whether your customers are based in the European Union, the United States, India, or any other region with active data protection regulations, this extension keeps your store aligned with GDPR, CCPA, the ePrivacy Directive, and India's Digital Personal Data Protection (DPDP) Act.",
+    "type": "magento2-module",
+    "version": "1.1.0",
+    "license": [    
+        "Commercial"
+    ],
+    "keywords": [
+        "Magento 2",
+        "adobe commerce",
+        "privacy",
+        "DPDPA",
+        "GDPR",
+        "CCPA",
+        "cookie consent",
+        "Script Blocker"    
+    ],
+    "authors": [
+        {
+            "name": "miniOrange",
+            "email": "magentosupport@xecurify.com"
+        }
+    ],
+    "support": {
+        "email": "magentosupport@xecurify.com"
+    },
+    "require": {
+        "php": "~7||~8"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MiniOrange\\CookieConsent\\": ""
+        }
+    }
+}

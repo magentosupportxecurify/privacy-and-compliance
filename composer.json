@@ -1,0 +1,56 @@
+{
+    "name": "miniorange_inc/privacy_cookie_consent",
+    "description": "Ensure complete data privacy compliance for your Adobe Commerce store with the Privacy and Compliance Manager Extension for Magento (Adobe Commerce). Easily manage customer data requests, cookie consent, and privacy controls while staying compliant with global regulations like DPDP, GDPR, CCPA, and other data protection laws. Build trust, improve transparency, and simplify compliance management from a single dashboard.",
+    "type": "magento2-module",
+    "license": [
+        "Commercial",
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "authors": [
+        {
+            "name": "miniOrange",
+            "homepage": "https://www.miniorange.com/",
+            "email": "info@xecurify.com"
+        }
+    ],
+    "version": "1.0.0",
+    "keywords": [
+        "Magento 2",
+        "Magento",
+        "Adobe Commerce",
+        "Privacy",
+        "Cookie Consent",
+        "Personal Data Protection",
+        "DPDPA",
+        "GDPR",
+        "CCPA",
+        "privacy consent",
+        "Privacy Policy"
+    ],
+    "require": {
+        "php": "~7|~8"
+    },
+    "support": {
+        "email": "magentosupport@xecurify.com"
+    },
+    "replace": {
+        "miniorange_inc/miniorange-pdprotect": "self.version",
+        "miniorange_inc/cookie-consent": "self.version"
+    },
+    "autoload": {
+        "files": [
+            "registration.php",
+            "privacy/registration.php",
+            "cookie-consent/registration.php",
+            "miniorange-pdprotect/registration.php"
+        ],
+        "psr-4": {
+            "MiniOrange\\Privacy\\": "privacy",
+            "MiniOrange\\CookieConsent\\": "cookie-consent",
+            "MiniOrange\\PDProtect\\": "miniorange-pdprotect"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
