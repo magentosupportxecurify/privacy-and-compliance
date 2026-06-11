@@ -17,7 +17,7 @@
                 return _nativeCookie.get.call(document);
             },
             set: function (val) {
-                var alwaysAllow = /^(PHPSESSID|form_key|store|mage-|X-Magento|private_content_version|section_data_ids)/i;
+                var alwaysAllow = /^(PHPSESSID|form_key|store|mage-|X-Magento|private_content_version|section_data_ids|mopdp_consent)/i;
                 if (!stored && !alwaysAllow.test(val)) {
                     window.__vendor_blocked_cookies = window.__vendor_blocked_cookies || [];
                     window.__vendor_blocked_cookies.push(val);
