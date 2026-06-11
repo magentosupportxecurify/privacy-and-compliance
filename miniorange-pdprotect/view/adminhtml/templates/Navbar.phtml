@@ -22,11 +22,11 @@ if ($viewModel->isPremium() && !$viewModel->isLicenseVerified()) {
         ? 'Your Trial account has expired. Please contact magentosupport@xecurify.com'
         : 'Trial Version Active - ' . $trialDays . ' Days Remaining';
 
-    echo '<div style="background-color:#f8f9fa; border-left:4px solid ' . $statusColor . '; padding:16px;'
+    echo '<div style="background-color:#f8f9fa; border-left:4px solid ' . $this->escapeHtmlAttr($statusColor) . '; padding:16px;'
        . ' margin:20px 14px; display:flex; align-items:center; justify-content:space-between;'
        . ' box-shadow:0 1px 3px rgba(0,0,0,0.12);">'
        . '<div style="display:flex; align-items:center; gap:12px;">'
-       . '<span style="color:' . $statusColor . '; font-size:16.4px; font-weight:bold;">' . $message . '</span>'
+       . '<span style="color:' . $this->escapeHtmlAttr($statusColor) . '; font-size:16.4px; font-weight:bold;">' . $this->escapeHtml($message) . '</span>'
        . '</div>'
        . '<div style="display:flex; gap:12px;">';
 
