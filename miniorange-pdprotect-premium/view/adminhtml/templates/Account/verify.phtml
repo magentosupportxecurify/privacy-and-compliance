@@ -1,0 +1,183 @@
+<?php
+/**
+ * State 1 — Login / Register with miniOrange account.
+ * Shown when no customer email is stored in config.
+ * Mirrors SSO's Account/verify.phtml layout exactly.
+ *
+ * @var \MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account $viewModel
+ */
+$viewModel        = $this->getData('view_model');
+$loginUrl         = $viewModel->getLoginUrl();
+$isTrialExpired   = $viewModel->isTrialExpired();
+$isTrialExtended  = $viewModel->isTrialExtended();
+$extendTrialUrl   = $viewModel->getExtendTrialUrl();
+?>
+
+<div class="p-8 mopdp-account-page">
+<div class="bg-white rounded-lg margin_left">
+
+    <!-- Register section (hidden by default) -->
+    <div id="mopdp-register-section" style="display:none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 8rem;">
+            <h1 class="text-3xl font-bold mb-6 text-gray-900 my-4 register_account_heading">
+                <?= $this->escapeHtml(__('Create New Account')) ?>
+            </h1>
+            <?php if ($isTrialExpired && !$isTrialExtended): ?>
+            <input type="button"
+                   value="<?= $this->escapeHtmlAttr(__('Extend Trial')) ?>"
+                   onclick="mopdpExtendTrial()"
+                   style="margin-top: 1.22rem;">
+            <?php endif; ?>
+        </div>
+        <div class="bg-white rounded-lg px-32 my-12" style="width:100%;">
+            <div class="bg-white rounded-xl flex px-mo-32 flex-col gap-mo-4 added_border inner_div">
+
+                <div class="w-full mo-input-wrapper group my-6">
+                    <label class="mo-input-label"><?= $this->escapeHtml(__('Email')) ?></label>
+                    <input class="w-full mo-input input_custom" type="email" id="mopdp-reg-email"
+                           placeholder="">
+                </div>
+
+                <div id="mopdp-reg-msg" style="display:none; margin-bottom:1rem; font-size:1.3rem;"></div>
+
+                <div class="flex flex-col gap-4 my-6">
+                    <button type="button" class="mo-button inverted input_custom"
+                            onclick="mopdpVerifyRegister()">
+                        <?= $this->escapeHtml(__('Register')) ?>
+                    </button>
+                    <button type="button" class="mo-button secondary input_custom"
+                            onclick="mopdpSwitchToLogin()">
+                        <?= $this->escapeHtml(__('Already Have an Account? Sign In')) ?>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Login section (visible by default) -->
+    <div id="mopdp-login-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 8rem;">
+            <h1 class="text-3xl font-bold mb-6 text-gray-900 my-4 register_account_heading">
+                <?= $this->escapeHtml(__('Login with miniOrange')) ?>
+            </h1>
+            <?php if ($isTrialExpired && !$isTrialExtended): ?>
+            <input type="button"
+                   value="<?= $this->escapeHtmlAttr(__('Extend Trial')) ?>"
+                   onclick="mopdpExtendTrial()"
+                   style="margin-top: 1.22rem;">
+            <?php endif; ?>
+        </div>
+        <div class="bg-white rounded-lg px-32 my-12" style="width:100%;">
+            <div class="bg-white rounded-xl flex px-mo-32 flex-col gap-mo-4 added_border inner_div">
+
+                <div class="w-full mo-input-wrapper group my-6">
+                    <label class="mo-input-label"><?= $this->escapeHtml(__('Email')) ?></label>
+                    <input class="w-full mo-input input_custom" type="email" id="mopdp-login-email"
+                           placeholder="">
+                </div>
+
+                <div class="w-full mo-input-wrapper group my-6">
+                    <label class="mo-input-label"><?= $this->escapeHtml(__('Password')) ?></label>
+                    <input class="w-full mo-input input_custom" type="password" id="mopdp-login-password"
+                           placeholder="<?= $this->escapeHtmlAttr(__('Enter your Password')) ?>">
+                </div>
+
+                <div class="my-2">
+                    <a href="https://login.xecurify.com/moas/idp/resetpassword" target="_blank"
+                       class="float-right hover:underline" style="color:#007bdb;">
+                        <?= $this->escapeHtml(__('Forgot Password')) ?>
+                    </a>
+                </div>
+
+                <button type="button" class="mo-button inverted input_custom"
+                        onclick="mopdpVerifyLogin()">
+                    <?= $this->escapeHtml(__('Login')) ?>
+                </button>
+
+                <a href="https://www.miniorange.com/businessfreetrial" target="_blank"
+                   class="mo-button secondary input_custom"
+                   style="margin-top:1rem; text-decoration:none;">
+                    <?= $this->escapeHtml(__('Register')) ?>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function () {
+    var loginUrl       = '<?= $this->escapeJs($loginUrl) ?>';
+    var extendTrialUrl = '<?= $this->escapeJs($extendTrialUrl) ?>';
+
+    window.mopdpSwitchToLogin = function () {
+        document.getElementById('mopdp-register-section').style.display = 'none';
+        document.getElementById('mopdp-login-section').style.display = '';
+    };
+
+    window.mopdpSwitchToRegister = function () {
+        document.getElementById('mopdp-login-section').style.display = 'none';
+        document.getElementById('mopdp-register-section').style.display = '';
+    };
+
+    function mopdpAjax(url, data, onSuccess, onError) {
+        var fd = new FormData();
+        var fkEl = document.querySelector('input[name="form_key"]');
+        if (fkEl) fd.append('form_key', fkEl.value);
+        for (var k in data) fd.append(k, data[k]);
+        fetch(url, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (json.success) {
+                    if (onSuccess) onSuccess(json);
+                } else {
+                    if (onError) onError(json);
+                }
+            })
+            .catch(function () {
+                if (onError) onError(null);
+            });
+    }
+
+    window.mopdpVerifyLogin = function () {
+        mopdpAjax(
+            loginUrl,
+            {
+                email:    document.getElementById('mopdp-login-email').value,
+                password: document.getElementById('mopdp-login-password').value
+            },
+            function () { location.reload(); },
+            function () { location.reload(); }
+        );
+    };
+
+    window.mopdpExtendTrial = function () {
+        var fd = new FormData();
+        var fkEl = document.querySelector('input[name="form_key"]');
+        if (fkEl) fd.append('form_key', fkEl.value);
+        fetch(extendTrialUrl, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (json.success) setTimeout(function () { location.reload(); }, 500);
+            })
+            .catch(function () {});
+    };
+
+    window.mopdpVerifyRegister = function () {
+        var msgEl = document.getElementById('mopdp-reg-msg');
+        var email = document.getElementById('mopdp-reg-email').value;
+        if (!email) {
+            msgEl.style.display = '';
+            msgEl.style.color = '#dc2626';
+            msgEl.textContent = '<?= $this->escapeJs(__('Please enter your email address.')->render()) ?>';
+            return;
+        }
+        // Redirect to registration page — email pre-fill not possible via redirect,
+        // so simply open the registration page in a new tab.
+        window.open('https://www.miniorange.com/businessfreetrial', '_blank');
+    };
+}());
+</script>

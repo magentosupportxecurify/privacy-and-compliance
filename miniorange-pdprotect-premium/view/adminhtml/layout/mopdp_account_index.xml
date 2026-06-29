@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="MiniOrange_PDProtect::css/pdprotect.css"/>
+        <css src="MiniOrange_PDProtectPremium::css/account.css"/>
+        <script src="MiniOrange_PDProtect::js/pdprotect.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="mopdp.navbar"
+                   template="MiniOrange_PDProtect::Navbar.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MiniOrange\PDProtect\ViewModel\Adminhtml\Configure</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="mopdp.account"
+                   template="MiniOrange_PDProtectPremium::Account/account.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account</argument>
+                </arguments>
+                <!-- Contact Us panel — child block, never leaks outside the account block.
+                     Named mopdp.account.contactus to avoid conflict with the free module's
+                     mopdp.support floating-widget block (registered by mopdp_support handle). -->
+                <block class="Magento\Framework\View\Element\Template"
+                       name="mopdp.account.contactus"
+                       template="MiniOrange_PDProtectPremium::Account/support.phtml">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

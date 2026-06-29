@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Override free Helper\Data with premium (unlocks all feature gates) -->
+    <preference for="MiniOrange\PDProtect\Helper\Data"
+                type="MiniOrange\PDProtectPremium\Helper\Data"/>
+
+    <!-- Override free Configure ViewModel to expose isModuleActive() for premium templates -->
+    <preference for="MiniOrange\PDProtect\ViewModel\Adminhtml\Configure"
+                type="MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Configure"/>
+
+    <!-- Override free TrackingService so free observer sends IsPremiumInstalled=YES when premium active -->
+    <preference for="MiniOrange\PDProtect\Helper\TrackingService"
+                type="MiniOrange\PDProtectPremium\Helper\TrackingService"/>
+
+    <!-- Suppress free module's AdminSessionObserver when premium is installed.
+         Premium's AdminSessionObserver owns all tracking (including consolidated free+premium payloads).
+         Prevents duplicate API calls when both modules are active simultaneously. -->
+    <preference for="MiniOrange\PDProtect\Observer\AdminSessionObserver"
+                type="MiniOrange\PDProtectPremium\Observer\FreeAdminSessionObserver"/>
+
+    <!-- Override DataDeletionConfig stub with full implementation -->
+    <preference for="MiniOrange\PDProtect\Model\Config\DataDeletionConfig"
+                type="MiniOrange\PDProtectPremium\Model\Config\DataDeletionConfig"/>
+
+    <!-- Override free frontend blocks with premium versions -->
+    <preference for="MiniOrange\PDProtect\Block\Frontend\PrivacyPopup"
+                type="MiniOrange\PDProtectPremium\Block\Frontend\PrivacyPopup"/>
+    <preference for="MiniOrange\PDProtect\Block\Frontend\CustomerPrivacy"
+                type="MiniOrange\PDProtectPremium\Block\Frontend\CustomerPrivacy"/>
+
+    <!-- Override free controllers with premium versions -->
+    <preference for="MiniOrange\PDProtect\Controller\Customer\DownloadData"
+                type="MiniOrange\PDProtectPremium\Controller\Customer\DownloadData"/>
+    <preference for="MiniOrange\PDProtect\Controller\Customer\DownloadServe"
+                type="MiniOrange\PDProtectPremium\Controller\Customer\DownloadServe"/>
+    <preference for="MiniOrange\PDProtect\Controller\Customer\AnonymizeData"
+                type="MiniOrange\PDProtectPremium\Controller\Customer\AnonymizeData"/>
+    <preference for="MiniOrange\PDProtect\Controller\Customer\WithdrawConsent"
+                type="MiniOrange\PDProtectPremium\Controller\Customer\WithdrawConsent"/>
+    <preference for="MiniOrange\PDProtect\Controller\Adminhtml\DataDeletion\UpdateStatus"
+                type="MiniOrange\PDProtectPremium\Controller\Adminhtml\DataDeletion\UpdateStatus"/>
+    <preference for="MiniOrange\PDProtect\Controller\Customer\RequestDeletion"
+                type="MiniOrange\PDProtectPremium\Controller\Customer\RequestDeletion"/>
+
+    <!-- Override free model stubs with premium real implementations -->
+    <preference for="MiniOrange\PDProtect\Model\PersonalDataAnonymizer"
+                type="MiniOrange\PDProtectPremium\Model\PersonalDataAnonymizer"/>
+    <preference for="MiniOrange\PDProtect\Model\CustomerDataEraser"
+                type="MiniOrange\PDProtectPremium\Model\CustomerDataEraser"/>
+    <preference for="MiniOrange\PDProtect\Model\ConsentLogCleaner"
+                type="MiniOrange\PDProtectPremium\Model\ConsentLogCleaner"/>
+
+    <!-- DI wiring for premium logger injection into premium cron/processors -->
+    <type name="MiniOrange\PDProtectPremium\Cron\RunDataDeletion">
+        <arguments>
+            <argument name="logger" xsi:type="object">MiniOrange\PDProtect\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="MiniOrange\PDProtectPremium\Model\DataDeletion\AbandonedCustomerProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">MiniOrange\PDProtect\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="MiniOrange\PDProtectPremium\Model\DataDeletion\RecentDocumentsProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">MiniOrange\PDProtect\Logger\Logger</argument>
+        </arguments>
+    </type>
+    <type name="MiniOrange\PDProtectPremium\Model\DataDeletion\OrderStatusProcessor">
+        <arguments>
+            <argument name="logger" xsi:type="object">MiniOrange\PDProtect\Logger\Logger</argument>
+        </arguments>
+    </type>
+
+    <!-- Override free consent save controllers (adds module-active gate — DevTools bypass protection) -->
+    <preference for="MiniOrange\PDProtect\Controller\Consent\Save"
+                type="MiniOrange\PDProtectPremium\Controller\Consent\Save"/>
+    <preference for="MiniOrange\PDProtect\Controller\Frontend\Consent\Save"
+                type="MiniOrange\PDProtectPremium\Controller\Frontend\Consent\Save"/>
+
+    <!-- Override ConsentLogger (covers CustomerLoginObserver which cannot be touched in free module) -->
+    <preference for="MiniOrange\PDProtect\Model\ConsentLogger"
+                type="MiniOrange\PDProtectPremium\Model\ConsentLogger"/>
+
+    <!-- Override free admin settings save controllers (DevTools bypass protection) -->
+    <preference for="MiniOrange\PDProtect\Controller\Adminhtml\GeneralSettings\Index"
+                type="MiniOrange\PDProtectPremium\Controller\Adminhtml\GeneralSettings\Index"/>
+    <preference for="MiniOrange\PDProtect\Controller\Adminhtml\CustomerPrivacy\Index"
+                type="MiniOrange\PDProtectPremium\Controller\Adminhtml\CustomerPrivacy\Index"/>
+
+    <!-- Pass real client IP through when the site is behind a load balancer or CDN (EC2, CloudFront, etc.) -->
+    <type name="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
+        <arguments>
+            <argument name="alternativeHeaders" xsi:type="array">
+                <item name="0" xsi:type="string">HTTP_X_FORWARDED_FOR</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

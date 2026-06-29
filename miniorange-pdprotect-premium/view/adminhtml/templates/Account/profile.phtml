@@ -1,0 +1,226 @@
+<?php
+/**
+ * State 3 — Profile / active state (license verified OR trial active).
+ * Mirrors SSO's Account/profile.phtml layout exactly.
+ *
+ * @var \MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account $viewModel
+ */
+$viewModel               = $this->getData('view_model');
+$isVerified              = $viewModel->isLicenseVerified();
+$isTrialActive           = $viewModel->isTrialActive();
+$isTrialExpired          = $viewModel->isTrialExpired();
+$isExtended              = $viewModel->isTrialExtended();
+$trialDays               = $viewModel->getTrialDaysRemaining();
+$email                   = $viewModel->getCustomerEmail();
+$customerKey             = $viewModel->getCustomerKey();
+$plan                    = $viewModel->getLicensePlan();
+$logoutUrl               = $viewModel->getLogoutUrl();
+$extendUrl               = $viewModel->getExtendTrialUrl();
+$removeLkUrl             = $viewModel->getRemoveLicenseUrl();
+$activatePremiumPlanUrl  = $viewModel->getActivatePremiumPlanUrl();
+$licenseSyncDate         = $viewModel->getLicenseSyncDate();
+$licenseExpiryDate       = $viewModel->getLicenseExpiryDate();
+
+// Show trial action buttons whenever license is not verified (includes expired-trial state)
+$showTrialActions = !$isVerified;
+
+if ($isVerified) {
+    $welcomeMsg = __('Thank you for choosing Personal Data Protection Premium. You are all set!');
+} else {
+    $welcomeMsg = __('Your trial has been activated. Activate a license key to unlock all premium features.');
+}
+?>
+
+<div id="userprofile" class="mopdp-account-page">
+<div class="px-mo-32 my-8 pt-8 margin_left_profile">
+
+    <!-- Header row: title + action buttons -->
+    <div class="flex my-2 flex_space_around">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900 my-4 register_account_heading">
+            <?= $this->escapeHtml(__('miniOrange Account Information')) ?>
+        </h1>
+
+        <div class="flex_flex_end_account" style="gap:0.75rem;">
+
+            <!-- Remove Account (always shown) -->
+            <input type="button"
+                   class="remove-btn"
+                   value="<?= $this->escapeHtmlAttr(__('Remove Account')) ?>"
+                   onclick="mopdpShowRemoveModal()">
+
+            <?php if ($showTrialActions): ?>
+                <?php if ($isTrialExpired && !$isExtended): ?>
+                    <!-- Extend Trial — only when expired and license not yet activated -->
+                    <input type="button"
+                           class="remove-btn"
+                           style="margin-left:5px;"
+                           value="<?= $this->escapeHtmlAttr(__('Extend Trial')) ?>"
+                           onclick="mopdpExtendTrial()">
+                <?php endif; ?>
+                <!-- Activate License — resets TRIAL_SKIPPED → routes back to verifylk (mirrors SSO activatePremiumPlan) -->
+                <input type="button"
+                       class="remove-btn"
+                       style="margin-left:5px;"
+                       value="<?= $this->escapeHtmlAttr(__('Activate License')) ?>"
+                       onclick="mopdpActivatePremiumPlan()">
+            <?php endif; ?>
+
+        </div>
+    </div>
+
+    <!-- Welcome message — shown above the card, matching SSO layout -->
+    <p class="my-4" style="font-size:1.4rem;">
+        <?= $this->escapeHtml($welcomeMsg->render()) ?>
+    </p>
+
+    <!-- Account details card -->
+    <div class="bg-white rounded-lg my-14 added_border" style="width:100%;">
+        <table class="table-auto w-full border-collapse border-gray-300 rounded-lg shadow-md bg-white">
+            <tbody>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('miniOrange Account Email')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?= $this->escapeHtml($email) ?>
+                    </td>
+                </tr>
+                <?php if ($customerKey): ?>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('Customer ID')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?= $this->escapeHtml($customerKey) ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('Plan Name')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?= $this->escapeHtml(ucfirst((string)$plan)) ?>
+                    </td>
+                </tr>
+                <?php if ($showTrialActions): ?>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('Trial Days Remaining')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?php if ($isTrialExpired): ?>
+                            <span style="color:#dc2626;"><?= $this->escapeHtml(__('Expired')) ?></span>
+                        <?php else: ?>
+                            <?= $this->escapeHtml((string)$trialDays . ' ' . __('days')) ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
+                <?php if ($isVerified && $licenseSyncDate): ?>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('License Sync Date')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?= $this->escapeHtml($licenseSyncDate) ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
+                <?php if ($isVerified && $licenseExpiryDate): ?>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-gray-700 font-medium">
+                        <?= $this->escapeHtml(__('License Expiry Date')) ?>
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">
+                        <?= $this->escapeHtml($licenseExpiryDate) ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</div>
+
+<!-- Remove Account Confirmation Modal -->
+<div id="mopdp-remove-account-modal"
+     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999;
+            align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:8px; padding:2rem; max-width:600px; width:90%;
+                box-shadow:0 8px 24px rgba(0,0,0,0.15);">
+        <h2 style="font-size:1.8rem; font-weight:500; margin-bottom:2rem;">
+            <?= $this->escapeHtml(__('Remove Account')) ?>
+        </h2>
+        <hr class="hr-style">
+        <p style="font-size:1.4rem; color:#555; margin-bottom:1.5rem; margin-top: 2rem;">
+            <?= $this->escapeHtml(__('Are you sure you want to log out of your miniOrange account?')) ?>
+        </p>
+        <div style="display:flex; gap:1rem; float:right">
+            <button type="button" class="mo-button inverted" style="width:auto; padding:0 1.5rem;"
+                    onclick="mopdpConfirmRemoveAccount()">
+                <?= $this->escapeHtml(__('Yes')) ?>
+            </button>
+            <button type="button" class="mo-button secondary" style="width:auto; padding:0 1.5rem;"
+                    onclick="mopdpCancelRemoveAccount()">
+                <?= $this->escapeHtml(__('Cancel')) ?>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+(function () {
+    var logoutUrl              = '<?= $this->escapeJs($logoutUrl) ?>';
+    var extendUrl              = '<?= $this->escapeJs($extendUrl) ?>';
+    var removeLkUrl            = '<?= $this->escapeJs($removeLkUrl) ?>';
+    var activatePremiumPlanUrl = '<?= $this->escapeJs($activatePremiumPlanUrl) ?>';
+
+    function mopdpAjax(url, data, onSuccess) {
+        var fd = new FormData();
+        var fkEl = document.querySelector('input[name="form_key"]');
+        if (fkEl) fd.append('form_key', fkEl.value);
+        for (var k in data) fd.append(k, data[k]);
+        fetch(url, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (json.success && onSuccess) onSuccess(json);
+            })
+            .catch(function () {});
+    }
+
+    window.mopdpShowRemoveModal = function () {
+        var modal = document.getElementById('mopdp-remove-account-modal');
+        modal.style.display = 'flex';
+    };
+    window.mopdpCancelRemoveAccount = function () {
+        document.getElementById('mopdp-remove-account-modal').style.display = 'none';
+    };
+    window.mopdpConfirmRemoveAccount = function () {
+        mopdpAjax(logoutUrl, {}, function () {
+            setTimeout(function () { location.reload(); }, 500);
+        });
+    };
+
+    window.mopdpRemoveLicense = function () {
+        if (!confirm('<?= $this->escapeJs(__('Remove your license? The module will revert to trial mode.')->render()) ?>')) return;
+        mopdpAjax(removeLkUrl, {}, function () {
+            setTimeout(function () { location.reload(); }, 500);
+        });
+    };
+
+    window.mopdpExtendTrial = function () {
+        mopdpAjax(extendUrl, {}, function () {
+            setTimeout(function () { location.reload(); }, 500);
+        });
+    };
+
+    // Mirrors SSO activatePremiumPlan(): resets TRIAL_SKIPPED → state machine routes to verifylk
+    window.mopdpActivatePremiumPlan = function () {
+        mopdpAjax(activatePremiumPlanUrl, {}, function () {
+            setTimeout(function () { location.reload(); }, 300);
+        });
+    };
+}());
+</script>

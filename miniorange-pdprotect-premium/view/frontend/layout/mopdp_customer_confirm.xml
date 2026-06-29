@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+    PDProtectPremium layout override for the Confirm Action page.
+
+    Replaces the free module's confirm.js with the premium version that reads
+    window.mopdpConfirmConfig at call time (inside mopdpConfirmAction) instead
+    of at IIFE load time (in <head>), fixing the timing bug that caused every
+    XHR to POST to the current page URL and receive a 404.
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="MiniOrange_PDProtect::js/confirm.js"/>
+        <script src="MiniOrange_PDProtectPremium::js/confirm.js"/>
+    </head>
+</page>

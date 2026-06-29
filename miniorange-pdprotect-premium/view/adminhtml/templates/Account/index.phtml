@@ -1,0 +1,224 @@
+<?php
+/** @var \MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account $viewModel */
+$viewModel        = $this->getViewModel();
+$isVerified       = $viewModel->isLicenseVerified();
+$plan             = $viewModel->getLicensePlan();
+$email            = $viewModel->getCustomerEmail();
+$isTrialActive    = $viewModel->isTrialActive();
+$isTrialExpired   = $viewModel->isTrialExpired();
+$trialDays        = $viewModel->getTrialDaysRemaining();
+$isExtended       = $viewModel->isTrialExtended();
+$loginUrl         = $viewModel->getLoginUrl();
+$registerUrl      = $viewModel->getRegisterUrl();
+$lkUrl            = $viewModel->getValidateLkUrl();
+$extendUrl        = $viewModel->getExtendTrialUrl();
+$removeLkUrl      = $viewModel->getRemoveLicenseUrl();
+?>
+
+<div style="padding: 0 1%; margin-top: 2rem;">
+    <div class="mopdp-page-header"><?= $this->escapeHtml(__('Account & License')) ?></div>
+
+    <?php if ($isVerified): ?>
+    <!-- License Active Panel -->
+    <div class="mopdp-panel">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title" style="color:#059669;">
+                    ✓ <?= $this->escapeHtml(__('License Active')) ?>
+                </div>
+                <div class="mopdp-panel-subtitle">
+                    <?= $this->escapeHtml(__('Plan:')) ?> <strong><?= $this->escapeHtml(strtoupper($plan)) ?></strong>
+                    <?php if ($email): ?> · <?= $this->escapeHtml($email) ?><?php endif; ?>
+                </div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+            <button type="button" class="btn btn-secondary" id="mopdp-remove-license-btn"
+                    onclick="mopdpRemoveLicense()">
+                <?= $this->escapeHtml(__('Remove License')) ?>
+            </button>
+        </div>
+    </div>
+
+    <?php elseif ($isTrialActive): ?>
+    <!-- Trial Active Panel -->
+    <div class="mopdp-panel">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title">
+                    <?= $this->escapeHtml(__('Trial Active')) ?>
+                    <span style="font-size:0.85rem; padding:3px 10px; background:#dbeafe; color:#1d4ed8; border-radius:4px; margin-left:8px;">
+                        <?= $this->escapeHtml((string) $trialDays) ?> <?= $this->escapeHtml(__('days remaining')) ?>
+                    </span>
+                </div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Activate a license key below to unlock permanent premium features.')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+            <?php if (!$isExtended): ?>
+            <button type="button" class="btn btn-secondary" onclick="mopdpExtendTrial()">
+                <?= $this->escapeHtml(__('Extend Trial by 7 Days')) ?>
+            </button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?php else: ?>
+    <!-- Trial Expired / Not Started Panel -->
+    <div class="mopdp-panel">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title" style="color:#dc2626;">
+                    <?= $isTrialExpired ? $this->escapeHtml(__('Trial Expired')) : $this->escapeHtml(__('Activate Your License')) ?>
+                </div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Enter a license key or log in to your MiniOrange account.')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+            <p style="color:#dc2626;"><?= $this->escapeHtml(__('Premium features are locked. Please activate a license key to continue.')) ?></p>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- License Key Panel -->
+    <?php if (!$isVerified): ?>
+    <div class="mopdp-panel" style="margin-top: 2rem;">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title"><?= $this->escapeHtml(__('Activate License Key')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+            <div class="form-row">
+                <label class="form-label"><?= $this->escapeHtml(__('License Key')) ?></label>
+                <div class="form-field">
+                    <div style="display:flex; gap:0.75rem;">
+                        <input type="text" id="mopdp-lk-input" class="mopdp-input" placeholder="<?= $this->escapeHtmlAttr(__('Enter your license key')) ?>" style="flex:1;">
+                        <button type="button" class="btn btn-primary" onclick="mopdpActivateLK()">
+                            <?= $this->escapeHtml(__('Activate')) ?>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="mopdp-lk-msg" style="margin-top:0.5rem; display:none;"></div>
+        </div>
+    </div>
+
+    <!-- MiniOrange Login / Register Panel -->
+    <div class="mopdp-panel" style="margin-top: 2rem;">
+        <div class="mopdp-panel-header">
+            <div class="mopdp-panel-title-container">
+                <div class="mopdp-panel-title"><?= $this->escapeHtml(__('MiniOrange Account')) ?></div>
+                <div class="mopdp-panel-subtitle"><?= $this->escapeHtml(__('Log in or register to manage your subscription')) ?></div>
+            </div>
+        </div>
+        <div class="mopdp-panel-body" style="padding: 2rem 1.5rem;">
+
+            <div id="mopdp-login-tab" style="margin-bottom:1.5rem;">
+                <div class="mopdp-panel-title" style="font-size:1rem; margin-bottom:1rem;"><?= $this->escapeHtml(__('Login')) ?></div>
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Email')) ?></label>
+                    <div class="form-field">
+                        <input type="email" id="mopdp-login-email" class="mopdp-input" placeholder="<?= $this->escapeHtmlAttr(__('admin@yourstore.com')) ?>">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Password')) ?></label>
+                    <div class="form-field">
+                        <input type="password" id="mopdp-login-password" class="mopdp-input" placeholder="••••••••">
+                    </div>
+                </div>
+                <div id="mopdp-login-msg" style="margin-bottom:0.5rem; display:none;"></div>
+                <button type="button" class="btn btn-primary" onclick="mopdpLogin()">
+                    <?= $this->escapeHtml(__('Login')) ?>
+                </button>
+            </div>
+
+            <hr style="margin: 1.5rem 0;">
+
+            <div id="mopdp-register-tab">
+                <div class="mopdp-panel-title" style="font-size:1rem; margin-bottom:1rem;"><?= $this->escapeHtml(__('Register')) ?></div>
+                <div class="form-row">
+                    <label class="form-label"><?= $this->escapeHtml(__('Email')) ?></label>
+                    <div class="form-field">
+                        <input type="email" id="mopdp-reg-email" class="mopdp-input" placeholder="<?= $this->escapeHtmlAttr(__('admin@yourstore.com')) ?>">
+                    </div>
+                </div>
+                <div id="mopdp-reg-msg" style="margin-bottom:0.5rem; display:none;"></div>
+                <button type="button" class="btn btn-primary" onclick="mopdpRegister()">
+                    <?= $this->escapeHtml(__('Register')) ?>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <?php endif; ?>
+
+</div>
+
+<script type="text/javascript">
+(function () {
+    var loginUrl    = '<?= $this->escapeJs($loginUrl) ?>';
+    var registerUrl = '<?= $this->escapeJs($registerUrl) ?>';
+    var lkUrl       = '<?= $this->escapeJs($lkUrl) ?>';
+    var extendUrl   = '<?= $this->escapeJs($extendUrl) ?>';
+    var removeUrl   = '<?= $this->escapeJs($removeLkUrl) ?>';
+
+    function mopdpAjax(url, data, onSuccess, msgEl) {
+        var fd = new FormData();
+        if (msgEl) {
+            msgEl.style.display = 'none';
+            msgEl.textContent = '';
+        }
+        for (var k in data) fd.append(k, data[k]);
+        fetch(url, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (msgEl) {
+                    msgEl.style.display = '';
+                    msgEl.style.color = json.success ? '#059669' : '#dc2626';
+                    msgEl.textContent = json.message || '';
+                }
+                if (json.success && onSuccess) onSuccess(json);
+            })
+            .catch(function () {
+                if (msgEl) {
+                    msgEl.style.display = '';
+                    msgEl.style.color = '#dc2626';
+                    msgEl.textContent = 'Request failed.';
+                }
+            });
+    }
+
+    window.mopdpLogin = function () {
+        mopdpAjax(loginUrl, {
+            email:    document.getElementById('mopdp-login-email').value,
+            password: document.getElementById('mopdp-login-password').value
+        }, function () { setTimeout(function () { location.reload(); }, 1000); },
+        document.getElementById('mopdp-login-msg'));
+    };
+
+    window.mopdpRegister = function () {
+        mopdpAjax(registerUrl, {
+            email: document.getElementById('mopdp-reg-email').value
+        }, function () { setTimeout(function () { location.reload(); }, 1500); },
+        document.getElementById('mopdp-reg-msg'));
+    };
+
+    window.mopdpActivateLK = function () {
+        mopdpAjax(lkUrl, {
+            lk: document.getElementById('mopdp-lk-input').value
+        }, function () { setTimeout(function () { location.reload(); }, 1500); },
+        document.getElementById('mopdp-lk-msg'));
+    };
+
+    window.mopdpExtendTrial = function () {
+        mopdpAjax(extendUrl, {}, function () { location.reload(); }, null);
+    };
+
+    window.mopdpRemoveLicense = function () {
+        if (!confirm('<?= $this->escapeJs(__('Remove license? The module will revert to trial mode.')->render()) ?>')) return;
+        mopdpAjax(removeUrl, {}, function () { location.reload(); }, null);
+    };
+}());
+</script>

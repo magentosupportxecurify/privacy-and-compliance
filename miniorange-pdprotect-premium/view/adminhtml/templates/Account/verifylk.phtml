@@ -1,0 +1,169 @@
+<?php
+/**
+ * State 2 — License key verification page.
+ * Shown when customer email is stored but no license / trial is active.
+ * Mirrors SSO's Account/verifylk.phtml layout exactly.
+ *
+ * Activate License uses a standard form POST so that error messages appear
+ * via Magento's admin flash-message banner (same as SSO). Skip and Back remain
+ * AJAX since they have no server-side error messages to surface.
+ *
+ * @var \MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account $viewModel
+ */
+$viewModel       = $this->getData('view_model');
+$email           = $viewModel->getCustomerEmail();
+$lkUrl           = $viewModel->getValidateLkUrl();
+$skipTrialUrl    = $viewModel->getSkipTrialUrl();
+$logoutUrl       = $viewModel->getLogoutUrl();
+$isTrialExpired  = $viewModel->isTrialExpired();
+$isTrialExtended = $viewModel->isTrialExtended();
+$extendTrialUrl  = $viewModel->getExtendTrialUrl();
+$portalUrl       = 'https://login.xecurify.com/moas/login?redirectUrl=https://login.xecurify.com/moas/viewlicensekeys';
+?>
+
+<div class="p-8 mopdp-account-page">
+<div class="px-mo-32 margin_left_verify">
+
+    <div class="inner_div_custom">
+
+        <div class="flex_spacebetween">
+            <h1 class="register_account_heading">
+                <?= $this->escapeHtml(__('Verify Your License')) ?>
+            </h1>
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+                <?php if ($isTrialExpired && !$isTrialExtended): ?>
+                <input type="button"
+                       value="<?= $this->escapeHtmlAttr(__('Extend Trial')) ?>"
+                       onclick="mopdpExtendTrial()">
+                <?php endif; ?>
+                <button type="button" class="mo-button secondary" style="width:auto; padding:0 1.5rem; height:3.6rem;"
+                        onclick="mopdpLogout()">
+                    <?= $this->escapeHtml(__('Back')) ?>
+                </button>
+            </div>
+        </div>
+
+        <p style="margin: 1.5rem 0; font-size:1.4rem;">
+            <a class="font-semibold text-blue-500" href="<?= $this->escapeUrl($portalUrl) ?>" target="_blank">
+                [<?= $this->escapeHtml(__('Click here to view your license key')) ?>]
+            </a>
+        </p>
+
+        <!-- Standard form POST — errors surface as Magento flash messages at top of page (mirrors SSO) -->
+        <form id="mopdp-lk-form" method="post" action="<?= $this->escapeUrl($lkUrl) ?>">
+
+            <div class="w-full mo-input-wrapper group my-6">
+                <label class="mo-input-label"><?= $this->escapeHtml(__('Email')) ?></label>
+                <input class="w-full mo-input input_custom" type="email"
+                       value="<?= $this->escapeHtmlAttr($email) ?>" disabled placeholder="">
+            </div>
+
+            <div class="w-full mo-input-wrapper group my-6">
+                <label class="mo-input-label"><?= $this->escapeHtml(__('License Key')) ?></label>
+                <input class="w-full mo-input input_custom" type="text" name="lk" id="mopdp-lk-input"
+                       placeholder="<?= $this->escapeHtmlAttr(__('Enter your license key to activate the extension')) ?>">
+            </div>
+
+            <div class="py-4 pl-8">
+                <b><?= $this->escapeHtml(__('Please read and accept the following before activating your license key:')) ?></b>
+                <div class="license_check">
+                    <div class="checkbox_input">
+                        <input type="checkbox" id="mopdp-lk-check" value="1">
+                    </div>
+                    <div>
+                        <b><i><?= $this->escapeHtml(__('This is not a developer license.')) ?></i></b>
+                        <?= $this->escapeHtml(__('Making any kind of change to the extension\'s code will delete all your configuration and make the extension unusable.')) ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inline message for checkbox validation only (no server round-trip needed) -->
+            <div id="mopdp-lk-msg" style="display:none; margin: 1rem 0; font-size:1.3rem; color:#dc2626;"></div>
+
+            <div class="flex flex-row gap-4 my-6 items-center">
+                <input type="button" id="mopdp-activate-lk-btn"
+                       value="<?= $this->escapeHtmlAttr(__('Activate License')) ?>"
+                       onclick="mopdpActivateLK()">
+                <input type="button" id="mopdp-skip-trial-btn"
+                       value="<?= $this->escapeHtmlAttr(__('Skip & Keep Trial Active')) ?>"
+                       onclick="mopdpSkipTrial()">
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+(function () {
+    var skipTrialUrl  = '<?= $this->escapeJs($skipTrialUrl) ?>';
+    var logoutUrl     = '<?= $this->escapeJs($logoutUrl) ?>';
+    var extendTrialUrl = '<?= $this->escapeJs($extendTrialUrl) ?>';
+
+    /** AJAX helper — used only for Skip Trial and Back (no flash messages needed). */
+    function mopdpAjax(url, data, onSuccess) {
+        var fd = new FormData();
+        var fkEl = document.querySelector('input[name="form_key"]');
+        if (fkEl) fd.append('form_key', fkEl.value);
+        for (var k in data) fd.append(k, data[k]);
+        fetch(url, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) { if (json.success && onSuccess) onSuccess(json); })
+            .catch(function () {});
+    }
+
+    /**
+     * Activate License — validates checkbox then submits the standard HTML form.
+     * Errors from the server will appear as Magento flash messages at the top of the page.
+     */
+    window.mopdpActivateLK = function () {
+        var check = document.getElementById('mopdp-lk-check');
+        var msgEl = document.getElementById('mopdp-lk-msg');
+
+        if (!check.checked) {
+            msgEl.style.display = '';
+            msgEl.textContent = '<?= $this->escapeJs(__('Please read and accept the license terms.')->render()) ?>';
+            return;
+        }
+        msgEl.style.display = 'none';
+
+        // Inject the page-level form_key into the form before submitting
+        var form  = document.getElementById('mopdp-lk-form');
+        var pageFk = document.querySelector('input[name="form_key"]');
+        if (pageFk) {
+            var fkHidden = document.createElement('input');
+            fkHidden.type  = 'hidden';
+            fkHidden.name  = 'form_key';
+            fkHidden.value = pageFk.value;
+            form.appendChild(fkHidden);
+        }
+        form.submit();
+    };
+
+    window.mopdpSkipTrial = function () {
+        mopdpAjax(skipTrialUrl, {},
+            function () { setTimeout(function () { location.reload(); }, 800); }
+        );
+    };
+
+    window.mopdpLogout = function () {
+        mopdpAjax(logoutUrl, {},
+            function () { setTimeout(function () { location.reload(); }, 500); }
+        );
+    };
+
+    window.mopdpExtendTrial = function () {
+        var fd = new FormData();
+        var fkEl = document.querySelector('input[name="form_key"]');
+        if (fkEl) fd.append('form_key', fkEl.value);
+        fetch(extendTrialUrl, { method: 'POST', body: fd })
+            .then(function (r) { return r.json(); })
+            .then(function (json) {
+                if (json.success) setTimeout(function () { location.reload(); }, 500);
+            })
+            .catch(function () {});
+    };
+}());
+</script>

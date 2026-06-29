@@ -1,0 +1,469 @@
+/**
+ * PDProtect Premium — Account page styles
+ * Extracted from SSO/view/adminhtml/web/css/account.css to match visual identity.
+ */
+
+/* ── Layout helpers ── */
+.p-8  { padding: 2rem; }
+.p-6  { padding: 1.5rem; }
+.pl-8 { padding-left: 2rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.px-32 { padding-left: 8rem; padding-right: 8rem; }
+.px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+.px-4  { padding-left: 1rem; padding-right: 1rem; }
+
+.my-2  { margin-top: 0.5rem;  margin-bottom: 0.5rem; }
+.my-4  { margin-top: 1rem;    margin-bottom: 1rem; }
+.my-6  { margin-top: 1.5rem;  margin-bottom: 1.5rem; }
+.my-8  { margin-top: 2rem;    margin-bottom: 2rem; }
+.my-12 { margin-top: 3rem;    margin-bottom: 3rem; }
+.my-14 { margin-top: 3.5rem;  margin-bottom: 3.5rem; }
+.mb-6  { margin-bottom: 1.5rem; }
+.mt-4  { margin-top: 1rem; }
+.pt-8  { padding-top: 2rem; }
+
+.px-mo-32 { padding-left: 6rem; padding-right: 6rem; }
+.gap-mo-4 { gap: 1rem; }
+.gap-mo-32 { gap: 8rem; }
+
+/* ── Flexbox ── */
+.flex         { display: flex; }
+.inline-flex  { display: inline-flex; }
+.flex-row     { flex-direction: row; }
+.flex-col     { flex-direction: column; }
+.flex-2       { flex: 2; }
+.items-center { align-items: center; }
+.justify-end  { justify-content: flex-end; }
+.justify-center { justify-content: center; }
+.gap-4  { gap: 1rem; }
+
+.float-right { float: right; }
+.cursor-pointer { cursor: pointer; }
+.w-full { width: 100%; }
+
+/* ── Typography ── */
+.text-3xl   { font-size: 1.875rem; }
+.font-bold  { font-weight: 600; }
+.font-semibold { font-weight: 600; }
+.font-medium { font-weight: 500; }
+.text-gray-900 { color: #111827; }  /* matches SSO: near-black for headings */
+.text-gray-700 { color: #374151; }  /* matches SSO: dark gray for table labels */
+
+/* ── Colours / backgrounds ── */
+.bg-white   { background-color: #fff; }
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.shadow-md  { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); }
+
+/* ── Global orange button rule (matches SSO account.css) ── */
+.mopdp-account-page input[type='submit'],
+.mopdp-account-page input[type='button'] {
+    background-color: #eb5202;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    padding: 8px 15px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 1px 1px 4px #dadada;
+}
+.mopdp-account-page input[type='submit']:hover,
+.mopdp-account-page input[type='button']:hover {
+    background-color: #ba4000;
+}
+
+/* ── Table helpers ── */
+.table-auto      { width: 100%; }  /* must be 100% so w-full wins */
+.border-collapse { border-collapse: collapse; }
+.border          { border: 1px solid #e2e8f0; }
+.border-gray-300 { border-color: #e2e8f0; }
+.hover\:bg-gray-50:hover { background-color: #f7fafc; }
+
+/* ── Card: inner_div ── */
+.inner_div {
+    background-color: #ffffff;
+    padding: 4rem;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.inner_div_custom {
+    background-color: #ffffff;
+    padding: 4rem;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+}
+
+/* Added border (used on profile table wrapper) */
+.added_border {
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+}
+
+/* ── Headings ── */
+.register_account_heading {
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: black;
+    display: block;
+    text-align: left;
+}
+
+/* ── Margin helpers for page-level alignment ── */
+.margin_left {
+    margin-top: -2rem;
+    margin-left: -8rem;
+}
+.margin_left_verify {
+    margin-left: -6rem;
+}
+.margin_left_profile {
+    margin-top: -1.5rem;
+    margin-left: -5rem;
+}
+
+/* ── Input wrappers (floating-label pattern) ── */
+.mo-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.mo-input-label {
+    font-weight: 500;
+    border-radius: 4px;
+    position: absolute;
+    top: -0.625rem;
+    left: 0.75rem;
+    background-color: #ffffff;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 12px;
+    color: rgb(100 116 139);
+}
+
+.group:focus-within .mo-input-label {
+    font-weight: 700;
+    color: #eb5202;
+}
+
+/* ── Input fields ── */
+.mo-textarea,
+.mo-input[type='text'],
+.mo-input[type='password'],
+.mo-input[type='textarea'],
+.mo-input[type='url'],
+.mo-input[type='email'] {
+    -webkit-appearance: none;
+    outline: none !important;
+    box-shadow: none !important;
+    border: 2px solid rgb(226 232 240);
+    border-radius: 0.375rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    transition-duration: 200ms;
+    width: 100%;
+    font-size: 1.4rem;
+}
+
+.mo-textarea:disabled,
+.mo-input[type='text']:disabled,
+.mo-input[type='password']:disabled,
+.mo-input[type='textarea']:disabled,
+.mo-input[type='url']:disabled,
+.mo-input[type='email']:disabled {
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.mo-textarea:focus,
+.mo-input[type='text']:focus,
+.mo-input[type='password']:focus,
+.mo-input[type='textarea']:focus,
+.mo-input[type='url']:focus,
+.mo-input[type='email']:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: 2px solid #eb5202;
+}
+
+.mo-input::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+    font-size: 1.3rem;
+}
+
+.input_custom {
+    height: 5rem;
+}
+
+/* ── Buttons ── */
+.mo-button {
+    display: flex;
+    height: 40px;
+    width: 100%;
+    cursor: pointer;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-radius: 0.375rem;
+    border: none;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.remove-btn {
+    background-color: #eb5202 !important;
+    margin-bottom:2rem;
+}
+
+.hr-style {
+    margin-right: 0% !important;
+
+}
+
+.mo-button:hover {
+    text-decoration: none;
+    background-color: #ba4000;
+    color: #fff;
+}
+
+.mo-button:disabled {
+    background-color: rgb(199 210 254);
+    cursor: not-allowed;
+}
+
+.mo-button.inverted {
+    background-color: #eb5202;
+    border: none;
+    color: #fff;
+}
+
+.mo-button.inverted:hover {
+    background-color: #ba4000;
+    color: #ffffff;
+}
+
+.mo-button.secondary {
+    background-color: #ffffff;
+    border: 1px solid rgb(203 213 225);
+    color: #000;
+    border-radius: 0.375rem;
+}
+
+.mo-button.secondary:hover {
+    background-color: rgb(241 245 249);
+    border: 1px solid rgb(203 213 225);
+    color: #000;
+    text-decoration: none;
+}
+
+.mo-button.secondary:disabled {
+    background-color: rgb(248 250 252);
+    color: rgb(156 163 175);
+    cursor: not-allowed;
+}
+
+/* ── Flexbox helpers for profile page ── */
+.flex_spacebetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex_space_around {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex_flex_end_account {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-top: -1.5rem;
+}
+
+.flex_center {
+    display: flex;
+    align-items: center;
+}
+
+.float_right {
+    float: right;
+}
+
+/* ── License key disclaimer box ── */
+.license_check {
+    border-left: solid 2px rgba(128, 128, 128, 0.65);
+    margin-top: 10px;
+    padding-left: 10px;
+    overflow: hidden;
+}
+
+.checkbox_input {
+    float: left;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: 4px;
+}
+
+/* ── Misc ── */
+.text-blue-500 { color: rgb(59 130 246); }
+.py-mo-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.font-semibold { font-weight: 600; }
+.hover\:underline:hover { text-decoration: underline; }
+
+/* ── Utility classes needed by support.phtml (sourced from SSO account.css) ── */
+.bg-gray-50  { background-color: #f9fafb; }
+.py-6        { padding-top: 1.5rem;  padding-bottom: 1.5rem; }
+.shadow      { box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); }
+.p-2         { padding: 0.5rem; }
+.text-white  { color: #ffffff; }
+.py-2        { padding-top: 0.5rem;  padding-bottom: 0.5rem; }
+.resize-y    { resize: vertical; }
+.h-28        { height: 7rem; }
+
+/* ── Two-column account page layout ── */
+/* Flexbox wrapper: account content left (~67%), Contact Us panel right (~360px).
+   The support block is a child of the account block so it never bleeds into the navbar. */
+.mopdp-account-flex-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    width: 100%;
+}
+
+.mopdp-account-main {
+    flex: 1 1 auto;
+    min-width: 0;           /* prevents flex blowout */
+}
+
+.mopdp-account-support {
+    flex: 0 0 400px;
+    width: 400px;
+}
+
+/* Responsive: stack vertically on narrow viewports */
+@media screen and (max-width: 1271px) {
+    .mopdp-account-flex-wrapper { flex-direction: column; }
+    .mopdp-account-support      { width: 100%; flex-basis: auto; }
+}
+
+/* .mopdp-page: keeps min-height parity so the right panel never looks taller than the left */
+.mopdp-page {
+    padding: 0 1%;
+    min-height: 395px;
+    overflow: hidden;
+}
+
+.support_outer_div {
+    margin-top: 11px;
+    width: 105%;
+}
+
+.support_heading {
+    font-weight: bold;
+    margin-left: 0;
+    font-size: 1.8rem;
+    padding-left: 1.3rem;
+    margin-top: 2rem;
+}
+
+.support_needHelp {
+    font-size: 1.3rem;
+    margin-left: 1.5rem;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
+    font-weight: normal;
+}
+
+.support_padding {
+    padding: 12px;
+}
+
+.margin_left_support {
+    margin-left: 3%;
+    background-color: #eb5202;
+    color: #fff !important;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    padding: 8px 15px;
+    font-weight: 600;
+}
+
+.margin_left_support:hover {
+    background-color: #ba4000;
+}
+
+/* Support form: floating label variant (matches SSO mo-input-label_support exactly) */
+.mo-input-label_support {
+    font-weight: 500;
+    position: absolute;
+    top: 0.135rem;
+    left: 1.75rem;
+    background-color: #ffffff;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 12px;
+    color: #64748b;
+    transition: all 0.2s;
+}
+
+.group:focus-within .mo-input-label_support {
+    font-weight: 700;
+    color: #eb5202;
+}
+
+/* Required asterisk */
+.mo-support-required {
+    color: red;
+    font-weight: normal;
+}
+
+/* Optional label */
+.mo-support-optional {
+    color: #999;
+    font-weight: normal;
+}
+
+/* Query textarea */
+.mo-support-query {
+    height: 120px;
+}
+
+/* ── Profile table — scoped overrides to beat Magento admin default td styles ──
+   Uses #userprofile ID (specificity 1,0,1) to win over Magento admin class rules
+   that would otherwise paint td text in a blue-ish admin colour. */
+#userprofile table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#userprofile table tbody td {
+    color: #374151;
+    vertical-align: middle;
+    padding: 1rem 1.5rem;
+    border: 2px solid #ccc;
+}
+#userprofile table tbody td.font-medium {
+    color: #111827;
+    font-weight: 600;
+}
+#userprofile table tbody tr:last-child td {
+    border-bottom: none;
+}
+#userprofile table tbody tr:hover td {
+    background-color: #f9fafb;
+}

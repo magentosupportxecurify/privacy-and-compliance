@@ -1,0 +1,66 @@
+<?php
+/**
+ * Account tab orchestrator — mirrors SSO's account.phtml state machine.
+ *
+ * States:
+ *   1. No customer email stored                     → verify.phtml  (login / register)
+ *   2. Email set, no license, trial not yet skipped → verifylk.phtml (activate license / skip to trial)
+ *   3. License verified OR user explicitly skipped  → profile.phtml  (account info)
+ *
+ * NOTE: isTrialActive() is NOT used here because AutoStartTrial sets TRIAL_START_DATE on install,
+ * making isTrialActive() always true and bypassing State 2. Instead we use isTrialSkipped() —
+ * an explicit flag set only when the user clicks "Skip & Keep Trial Active" on verifylk.
+ *
+ * @var \MiniOrange\PDProtectPremium\ViewModel\Adminhtml\Account $viewModel
+ */
+$viewModel      = $this->getViewModel();
+$email          = $viewModel->getCustomerEmail();
+$isVerified     = $viewModel->isLicenseVerified();
+$isTrialSkipped = $viewModel->isTrialSkipped();
+?>
+
+<!-- Two-column layout: account content left (~67%), Contact Us panel right (~33%).
+     The support block is a Magento child block rendered here to ensure it never leaks
+     outside this block and never affects the navbar above. -->
+<div class="mopdp-account-flex-wrapper">
+
+    <!-- Left column: account state content -->
+    <div class="mopdp-account-main">
+        <div class="mopdp-page" id="account">
+
+<?php
+if ($email === '') {
+    // State 1 — Not logged in to miniOrange account
+    echo $this->getLayout()
+        ->createBlock(\Magento\Framework\View\Element\Template::class)
+        ->setTemplate('MiniOrange_PDProtectPremium::Account/verify.phtml')
+        ->setData('view_model', $viewModel)
+        ->toHtml();
+
+} elseif (!$isVerified && !$isTrialSkipped) {
+    // State 2 — Logged in but no license and user has not yet skipped to trial
+    echo $this->getLayout()
+        ->createBlock(\Magento\Framework\View\Element\Template::class)
+        ->setTemplate('MiniOrange_PDProtectPremium::Account/verifylk.phtml')
+        ->setData('view_model', $viewModel)
+        ->toHtml();
+
+} else {
+    // State 3 — License active OR user chose to skip to trial
+    echo $this->getLayout()
+        ->createBlock(\Magento\Framework\View\Element\Template::class)
+        ->setTemplate('MiniOrange_PDProtectPremium::Account/profile.phtml')
+        ->setData('view_model', $viewModel)
+        ->toHtml();
+}
+?>
+
+        </div><!-- .mopdp-page -->
+    </div><!-- .mopdp-account-main -->
+
+    <!-- Right column: Contact Us panel (child block) -->
+    <div class="mopdp-account-support">
+        <?= $this->getChildHtml('mopdp.account.contactus') ?>
+    </div><!-- .mopdp-account-support -->
+
+</div><!-- .mopdp-account-flex-wrapper -->

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <!-- Account tab (premium-only, shown first) -->
+        <add id="MiniOrange_PDProtectPremium::account"
+             title="Account"
+             module="MiniOrange_PDProtectPremium"
+             sortOrder="5"
+             parent="MiniOrange_PDProtect::pdprotect"
+             action="mopdp/account/index"
+             resource="MiniOrange_PDProtectPremium::account"/>
+
+    </menu>
+</config>

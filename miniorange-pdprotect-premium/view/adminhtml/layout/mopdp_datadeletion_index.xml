@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!-- Use the premium template so Approve/Reject buttons can be disabled when license is inactive -->
+        <referenceBlock name="mopdp.data_deletion">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">MiniOrange_PDProtectPremium::DataDeletion/index.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>
