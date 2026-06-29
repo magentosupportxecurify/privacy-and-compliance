@@ -50,8 +50,7 @@
         "psr-4": {
             "MiniOrange\\Privacy\\": "privacy",
             "MiniOrange\\CookieConsent\\": "cookie-consent",
-            "MiniOrange\\PDProtect\\": "miniorange-pdprotect",
-            "MiniOrange\\PDProtectPremium\\": "miniorange-pdprotect-premium"
+            "MiniOrange\\PDProtect\\": "miniorange-pdprotect"
         }
     },
     "minimum-stability": "stable",
