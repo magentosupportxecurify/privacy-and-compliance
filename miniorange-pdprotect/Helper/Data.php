@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Store\Model\ScopeInterface;
 use MiniOrange\PDProtect\Logger\Logger;
 
 class Data extends AbstractHelper
@@ -48,10 +49,11 @@ class Data extends AbstractHelper
     public function flushCache(string $from = ''): void
     {
         try {
-            $this->log_debug("FlushCache: Flushing config + full_page cache from: " . $from);
+            $this->log_debug("FlushCache: Flushing config + block_html + full_page cache from: " . $from);
             $this->cacheTypeList->cleanType('config');
+            $this->cacheTypeList->cleanType('block_html');
             $this->cacheTypeList->cleanType('full_page');
-            $this->log_debug("FlushCache: Successfully flushed config and full_page caches");
+            $this->log_debug("FlushCache: Successfully flushed caches");
         } catch (\Exception $e) {
             $this->log_debug("FlushCache: Error flushing cache: " . $e->getMessage());
         }
@@ -62,34 +64,52 @@ class Data extends AbstractHelper
         $this->reinitableConfig->reinit();
     }
 
-    /**
-     * Read a value from Magento's core_config_data using its full config path.
-     * Mirrors SSO Data::getStoreConfig() — adapted for PDProtect's full-path convention
-     * (PDProtect uses full paths like 'pdprotect/premium/oauth_ckl' rather than short keys).
-     *
-     * @param string $path Full config path e.g. Constants::OAUTH_CKL
-     * @return mixed
-     */
+    private ?int $sandboxStoreId = null;
+    private bool $sandboxScopeResolved = false;
+
+    public function getEffectiveSandboxStoreId(): ?int
+    {
+        return $this->resolveSandboxStoreId();
+    }
+
+    public function isSandboxAdmin(): bool
+    {
+        return $this->resolveSandboxStoreId() !== null;
+    }
+
+    private function resolveSandboxStoreId(): ?int
+    {
+        if (!$this->sandboxScopeResolved) {
+            $transport = new \Magento\Framework\DataObject(['store_id' => null]);
+            $this->_eventManager->dispatch('mo_pdprotect_get_scope', ['transport' => $transport]);
+            $id = $transport->getData('store_id');
+            $this->sandboxStoreId = $id !== null ? (int) $id : null;
+            $this->sandboxScopeResolved = true;
+        }
+        return $this->sandboxStoreId;
+    }
+
     public function getStoreConfig(string $path): mixed
     {
+        $storeId = $this->resolveSandboxStoreId();
+        if ($storeId !== null) {
+            return $this->pdScopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $storeId);
+        }
         return $this->pdScopeConfig->getValue($path);
     }
 
-    /**
-     * Save a value to Magento's core_config_data at the default scope, then
-     * immediately flush the config cache and reinit so the new value is readable
-     * within the same request.
-     *
-     * Mirrors SSO Data::setStoreConfig() + CommonUtility::reinitConfig() pattern.
-     * Unlike SSO's setStoreConfig(), this also flushes cache — required because
-     * PDProtect reads config in the same request after saving.
-     *
-     * @param string $path  Full config path e.g. Constants::OAUTH_CKL
-     * @param mixed  $value Value to store (null clears the entry)
-     */
     public function setStoreConfig(string $path, mixed $value): void
     {
-        $this->configWriter->save($path, $value, 'default', 0);
+        $transport = new \Magento\Framework\DataObject([
+            'path'    => $path,
+            'value'   => $value,
+            'handled' => false,
+        ]);
+        $this->_eventManager->dispatch('mo_pdprotect_config_save', ['transport' => $transport]);
+
+        if (!$transport->getData('handled')) {
+            $this->configWriter->save($path, $value, 'default', 0);
+        }
         $this->flushCache('setStoreConfig');
         $this->reinitConfig();
     }

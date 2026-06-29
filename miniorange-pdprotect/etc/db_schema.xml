@@ -18,6 +18,7 @@
            comment="PDProtect Account Deletion Requests">
         <column xsi:type="int" name="request_id" unsigned="true" nullable="false" identity="true" comment="Request ID"/>
         <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" comment="Customer ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" comment="Store ID"/>
         <column xsi:type="varchar" name="customer_email" nullable="false" length="255" comment="Customer Email"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="255" comment="Customer Name"/>
         <column xsi:type="varchar" name="status" nullable="false" length="20" default="pending" comment="pending, approved, rejected"/>

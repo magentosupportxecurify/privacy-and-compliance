@@ -5,6 +5,7 @@
         <pdprotect>
             <general>
                 <allowed_countries_mode>all</allowed_countries_mode>
+                <log_guest_consent>1</log_guest_consent>
             </general>
             <customer_privacy>
                 <enable_data_download>1</enable_data_download>

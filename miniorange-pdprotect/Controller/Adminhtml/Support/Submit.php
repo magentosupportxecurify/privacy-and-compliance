@@ -17,7 +17,17 @@ use MiniOrange\PDProtect\Helper\Curl;
  */
 class Submit extends Action
 {
-    public const ADMIN_RESOURCE = 'MiniOrange_PDProtect::config';
+    public const ADMIN_RESOURCE = 'MiniOrange_PDProtect::pdprotect';
+
+    protected function _isAllowed(): bool
+    {
+        return $this->_authorization->isAllowed('MiniOrange_PDProtect::general_settings')
+            || $this->_authorization->isAllowed('MiniOrange_PDProtect::customer_privacy')
+            || $this->_authorization->isAllowed('MiniOrange_PDProtect::data_deletion')
+            || $this->_authorization->isAllowed('MiniOrange_PDProtect::datadeletionconfig')
+            || $this->_authorization->isAllowed('MiniOrange_PDProtect::consentlogs')
+            || $this->_authorization->isAllowed('MiniOrange_PDProtect::upgrade');
+    }
 
     public function __construct(
         Context $context,

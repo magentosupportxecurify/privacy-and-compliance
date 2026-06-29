@@ -55,15 +55,15 @@ class Save implements HttpPostActionInterface, CsrfAwareActionInterface
 
         $countryCode = (string) $this->session->getData(self::COUNTRY_SESSION_KEY);
 
-        if ($isLoggedIn) {
+        if (!$logGuests) {
+            $this->dataHelper->log_debug('Consent\Save: skipping DB log (Record consent disabled)');
+        } elseif ($isLoggedIn) {
             $this->dataHelper->log_debug('Consent\Save: writing consent log to DB (logged-in customer)');
             $customer = $this->customerSession->getCustomer();
             $this->consentLogger->log($status, (int) $customer->getId(), $countryCode, $customer->getEmail());
-        } elseif ($logGuests) {
+        } else {
             $this->dataHelper->log_debug('Consent\Save: writing consent log to DB (guest)');
             $this->consentLogger->log($status, null, $countryCode, null);
-        } else {
-            $this->dataHelper->log_debug('Consent\Save: skipping DB log');
         }
 
         return $result->setData(['success' => true]);

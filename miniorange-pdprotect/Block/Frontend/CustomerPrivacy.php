@@ -14,7 +14,7 @@ class CustomerPrivacy extends Template
     public function __construct(
         Context $context,
         private readonly ScopeConfigInterface $scopeConfig,
-        private readonly Data $dataHelper,
+        protected readonly Data $dataHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);

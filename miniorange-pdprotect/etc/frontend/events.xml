@@ -5,4 +5,8 @@
         <observer name="mopdp_log_consent_on_login"
                   instance="MiniOrange\PDProtect\Observer\CustomerLoginObserver"/>
     </event>
+    <event name="customer_logout">
+        <observer name="mopdp_clear_consent_cookie_on_logout"
+                  instance="MiniOrange\PDProtect\Observer\CustomerLogoutObserver"/>
+    </event>
 </config>
