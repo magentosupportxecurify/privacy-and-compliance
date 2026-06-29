@@ -16,21 +16,21 @@ $saveUrl = $block->getSaveUrl();
                     <p class="mo-card__subtitle"><?= $block->escapeHtml(__('Show the cookie consent banner to site visitors. Disable to turn off the entire banner feature.')) ?></p>
                 </div>
                 <div class="mo-card__body">
-                    <div class="mo-field mo-field--toggle">
-                        <label class="mo-label" for="general_enabled">
-                            <?= $block->escapeHtml(__('Enable Cookie Banner')) ?>
-                        </label>
+                    <div class="mo-field">
+                        <label class="mo-label"><?= $block->escapeHtml(__('Enable Cookie Banner')) ?></label>
                         <div class="mo-field__control">
-                            <label class="mo-toggle">
+                            <label class="mo-checkbox-label">
                                 <input type="checkbox"
                                        id="general_enabled"
                                        name="general[enabled]"
                                        value="1"
+                                       class="mo-custom-checkbox"
                                        <?= $block->isEnabled('general/enabled') ? 'checked="checked"' : '' ?>/>
-                                <span class="mo-toggle__slider"></span>
+                                <?= $block->escapeHtml(__('Enable cookie consent banner')) ?>
                             </label>
                         </div>
                     </div>
+
                 </div>
             </div>
 

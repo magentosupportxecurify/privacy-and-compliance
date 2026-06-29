@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MiniOrange\CookieConsent\Observer;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\State;
 use Magento\Framework\Event\Observer;
@@ -19,7 +20,8 @@ class TransformPageResponse implements ObserverInterface
         private readonly PrivacyHelper $privacyHelper,
         private readonly ScriptBlocker $scriptBlocker,
         private readonly State $appState,
-        private readonly StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager,
+        private readonly RequestInterface $request
     ) {
     }
 
@@ -30,6 +32,10 @@ class TransformPageResponse implements ObserverInterface
                 return;
             }
         } catch (\Exception $e) {
+            return;
+        }
+
+        if ($this->request->getHeader('X-Mo-Script-Scan') === '1') {
             return;
         }
 

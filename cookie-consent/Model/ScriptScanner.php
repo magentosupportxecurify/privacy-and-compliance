@@ -55,6 +55,7 @@ class ScriptScanner
         $this->curl->setTimeout(20);
         $this->curl->setOption(CURLOPT_FOLLOWLOCATION, true);
         $this->curl->setOption(CURLOPT_MAXREDIRS, 5);
+        $this->curl->addHeader('X-Mo-Script-Scan', '1');
         try {
             $this->curl->get($url);
         } catch (\Throwable) {

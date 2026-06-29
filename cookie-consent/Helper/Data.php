@@ -62,35 +62,56 @@ class Data extends AbstractHelper
      * @param int|string|null $scopeId
      * @return string|int|null
      */
+    private ?int $sandboxStoreId = null;
+    private bool $sandboxScopeResolved = false;
+
+    public function getEffectiveSandboxStoreId(): ?int
+    {
+        return $this->resolveSandboxStoreId();
+    }
+
+    private function resolveSandboxStoreId(): ?int
+    {
+        if (!$this->sandboxScopeResolved) {
+            $transport = new \Magento\Framework\DataObject(['store_id' => null]);
+            $this->_eventManager->dispatch('mo_cookieconsent_get_scope', ['transport' => $transport]);
+            $id = $transport->getData('store_id');
+            $this->sandboxStoreId = $id !== null ? (int) $id : null;
+            $this->sandboxScopeResolved = true;
+        }
+        return $this->sandboxStoreId;
+    }
+
     public function getStoreConfig($config, $scope = 'default', $scopeId = null)
     {
         $fullPath = self::CONFIG_PATH_PREFIX . $config;
-
+        $storeId  = $this->resolveSandboxStoreId();
+        if ($storeId !== null) {
+            return $this->scopeConfig->getValue($fullPath, ScopeInterface::SCOPE_STORE, $storeId);
+        }
         if ($scope === 'default' || $scopeId === null) {
             return $this->scopeConfig->getValue($fullPath);
         }
-
         return $this->scopeConfig->getValue($fullPath, $scope, $scopeId);
     }
 
-    /**
-     * Write value to core_config_data.
-     *
-     * @param string $config Short path after miniorange/CookieConsent/
-     * @param string|int|null $value
-     * @param string $scope
-     * @param int|string|null $scopeId
-     */
     public function setStoreConfig($config, $value, $scope = 'default', $scopeId = null): void
     {
-        $fullPath = self::CONFIG_PATH_PREFIX . $config;
+        $fullPath  = self::CONFIG_PATH_PREFIX . $config;
+        $transport = new \Magento\Framework\DataObject([
+            'path'    => $fullPath,
+            'value'   => $value,
+            'handled' => false,
+        ]);
+        $this->_eventManager->dispatch('mo_cookieconsent_config_save', ['transport' => $transport]);
 
-        if ($scope === 'default' || $scopeId === null) {
-            $this->configWriter->save($fullPath, $value);
-        } else {
-            $this->configWriter->save($fullPath, $value, $scope, $scopeId);
+        if (!$transport->getData('handled')) {
+            if ($scope === 'default' || $scopeId === null) {
+                $this->configWriter->save($fullPath, $value);
+            } else {
+                $this->configWriter->save($fullPath, $value, $scope, $scopeId);
+            }
         }
-
         $this->flushCache('setStoreConfig:' . $config);
     }
 

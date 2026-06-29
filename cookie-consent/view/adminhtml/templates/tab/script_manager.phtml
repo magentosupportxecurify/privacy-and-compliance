@@ -29,22 +29,24 @@ $catOptions = [
                     <p class="mo-card__subtitle"><?= $block->escapeHtml(__('Control which third-party scripts are blocked until the visitor gives consent.')) ?></p>
                 </div>
                 <div class="mo-card__body">
-                    <div class="mo-field mo-field--toggle">
+                    <div class="mo-field">
                         <label class="mo-label"><?= $block->escapeHtml(__('Enable Script Blocker')) ?></label>
                         <div class="mo-field__control">
                             <input type="hidden" name="script_manager[enabled]" value="0"/>
-                            <label class="mo-toggle <?= !$bannerOn ? 'mo-toggle--disabled' : '' ?>">
+                            <label class="mo-checkbox-label<?= !$bannerOn ? ' mo-checkbox-label--disabled' : '' ?>">
                                 <?php if ($bannerOn) : ?>
                                     <input type="checkbox"
+                                           class="mo-custom-checkbox"
                                            name="script_manager[enabled]"
                                            value="1"
                                            <?= $blockerCfgOn ? 'checked="checked"' : '' ?>/>
                                 <?php else : ?>
                                     <input type="checkbox"
+                                           class="mo-custom-checkbox"
                                            disabled="disabled"
-                                            <?= $blockerCfgOn ? 'checked="checked"' : '' ?>/>
+                                           <?= $blockerCfgOn ? 'checked="checked"' : '' ?>/>
                                 <?php endif; ?>
-                                <span class="mo-toggle__slider"></span>
+                                <?= $block->escapeHtml(__('Enable script blocking until consent is given')) ?>
                             </label>
                         </div>
                     </div>

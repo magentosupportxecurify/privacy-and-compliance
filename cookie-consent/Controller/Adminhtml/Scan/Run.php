@@ -42,7 +42,8 @@ class Run extends Action
         }
 
         try {
-            $urls = $this->scriptScanner->scanStoreHomepage();
+            $storeId = $this->privacyHelper->getEffectiveSandboxStoreId();
+            $urls = $this->scriptScanner->scanStoreHomepage($storeId);
             $existing = $this->privacyHelper->getDiscoveredMap();
             $merged = [];
             foreach ($urls as $url) {

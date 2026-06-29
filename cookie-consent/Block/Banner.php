@@ -32,9 +32,7 @@ class Banner extends Template
 
     public function isEnabled(): bool
     {
-        $storeId = (int) $this->storeManager->getStore()->getId();
-
-        return $this->privacyHelper->isBannerEnabled($storeId);
+        return $this->privacyHelper->isBannerEnabled((int) $this->storeManager->getStore()->getId());
     }
 
     public function getBannerConfig(): array

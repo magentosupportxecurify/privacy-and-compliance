@@ -60,6 +60,7 @@ class Save extends Action
             }
 
             $this->privacyHelper->setStoreConfig('general/enabled', $newBannerEnabled);
+
             $this->privacyHelper->setStoreConfig('general/position', $g['position'] ?? 'bottom');
             $this->privacyHelper->setStoreConfig('general/banner_title', $g['banner_title'] ?? '');
             $this->privacyHelper->setStoreConfig('general/banner_body', $g['banner_body'] ?? '');
