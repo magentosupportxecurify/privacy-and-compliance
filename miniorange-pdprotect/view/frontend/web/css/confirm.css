@@ -43,6 +43,14 @@
     justify-content: center;
     flex-shrink: 0;
 }
+
+a:active, .alink:active {
+    color: #1979c3;
+}
+
+.mopdp-confirm-btn:hover { 
+    color: white; 
+}
 .mopdp-confirm-icon svg { width: 24px; height: 24px; stroke: #1979c3; }
 .mopdp-confirm-title { font-size: 1.6rem; font-weight: 700; color: #111; }
 

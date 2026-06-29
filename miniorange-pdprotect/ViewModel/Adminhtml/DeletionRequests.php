@@ -82,6 +82,11 @@ class DeletionRequests implements ArgumentInterface
     {
         $conditions = [];
 
+        $sandboxStoreId = $this->helper->getEffectiveSandboxStoreId();
+        if ($sandboxStoreId !== null) {
+            $conditions[] = 'store_id = ' . (int) $sandboxStoreId;
+        }
+
         $filter = $this->getStatusFilter();
         if ($filter !== 'all') {
             $conditions[] = "status = '{$filter}'";
@@ -111,8 +116,12 @@ class DeletionRequests implements ArgumentInterface
     {
         $connection = $this->resource->getConnection();
         $table      = $this->resource->getTableName('miniorange_pdprotect_deletion_request');
-        $rows       = $connection->fetchAll(
-            "SELECT status, COUNT(*) AS cnt FROM {$table} GROUP BY status"
+
+        $sandboxStoreId = $this->helper->getEffectiveSandboxStoreId();
+        $where = $sandboxStoreId !== null ? ' WHERE store_id = ' . (int) $sandboxStoreId : '';
+
+        $rows = $connection->fetchAll(
+            "SELECT status, COUNT(*) AS cnt FROM {$table}{$where} GROUP BY status"
         );
         $counts = ['pending' => 0, 'approved' => 0, 'rejected' => 0];
         foreach ($rows as $row) {

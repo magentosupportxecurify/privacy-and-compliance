@@ -1,6 +1,6 @@
 <?php
 /** @var \MiniOrange\PDProtect\Block\Frontend\PrivacyPopup $block */
-if (!$block->isPopupEnabled() || !$block->shouldShowForCountry() || $block->hasConsentCookie()) {
+if (!$block->isPopupEnabled() || !$block->shouldShowForCountry()) {
     return;
 }
 ?>

@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace MiniOrange\PDProtect\ViewModel\Adminhtml;
 
+use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Directory\Model\Config\Source\Country;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -29,15 +29,15 @@ class Configure implements ArgumentInterface
     ];
 
     public function __construct(
-        private readonly ScopeConfigInterface $scopeConfig,
-        private readonly WriterInterface $configWriter,
         private readonly RequestInterface $request,
         private readonly UrlInterface $urlBuilder,
         private readonly Country $countrySource,
         private readonly OrderStatusSource $orderStatusSource,
         private readonly DataDeletionConfig $dataDeletionConfig,
         private readonly AssetRepository $assetRepository,
-        private readonly PDProtectHelper $pdHelper
+        private readonly PDProtectHelper $pdHelper,
+        private readonly AuthSession $authSession,
+        private readonly AuthorizationInterface $authorization
     ) {}
 
     public function getTabUrl(string $tab): string
@@ -108,110 +108,142 @@ class Configure implements ArgumentInterface
         return $this->urlBuilder->getUrl('mopdp/support/submit');
     }
 
+    public function isSupportAllowed(): bool
+    {
+        return $this->authorization->isAllowed('MiniOrange_PDProtect::general_settings')
+            || $this->authorization->isAllowed('MiniOrange_PDProtect::customer_privacy')
+            || $this->authorization->isAllowed('MiniOrange_PDProtect::data_deletion')
+            || $this->authorization->isAllowed('MiniOrange_PDProtect::datadeletionconfig')
+            || $this->authorization->isAllowed('MiniOrange_PDProtect::consentlogs')
+            || $this->authorization->isAllowed('MiniOrange_PDProtect::upgrade');
+    }
+
+    public function isSandboxAdmin(): bool
+    {
+        return $this->pdHelper->isSandboxAdmin();
+    }
+
+    public function canViewAccountTab(): bool
+    {
+        if (!$this->pdHelper->isSandboxAdmin()) {
+            return true;
+        }
+        try {
+            $user = $this->authSession->getUser();
+            if (!$user) {
+                return false;
+            }
+            $role = $user->getRole();
+            return $role && strtolower((string) $role->getRoleName()) === 'administrators';
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     // --- General Settings getters ---
 
     public function getDisplayPopup(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/general/display_popup');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/general/display_popup');
     }
 
     public function getAllowedCountriesMode(): string
     {
-        $mode = (string) $this->scopeConfig->getValue('pdprotect/general/allowed_countries_mode');
+        $mode = (string) $this->pdHelper->getStoreConfig('pdprotect/general/allowed_countries_mode');
         return in_array($mode, ['all', 'none', 'specific'], true) ? $mode : 'all';
     }
 
     public function getCountryRestriction(): array
     {
-        $value = (string) $this->scopeConfig->getValue('pdprotect/general/country_restriction');
+        $value = (string) $this->pdHelper->getStoreConfig('pdprotect/general/country_restriction');
         return $value !== '' ? explode(',', $value) : [];
     }
 
     public function getLogGuestConsent(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/general/log_guest_consent');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/general/log_guest_consent');
     }
 
     public function getLogAutoClean(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/general/log_auto_clean');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/general/log_auto_clean');
     }
 
     public function getLogAutoCleanPeriod(): int
     {
-        return (int) ($this->scopeConfig->getValue('pdprotect/general/log_auto_clean_period') ?: 30);
+        return (int) ($this->pdHelper->getStoreConfig('pdprotect/general/log_auto_clean_period') ?: 30);
     }
 
     public function getLogAutoCleanUnit(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/general/log_auto_clean_unit') ?: 'days');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/general/log_auto_clean_unit') ?: 'days');
     }
 
     // --- Customer Account Privacy getters ---
 
     public function getCustomerPrivacyTabName(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/tab_name') ?: 'Privacy Settings');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/tab_name') ?: 'Privacy Settings');
     }
 
     public function getShowPrivacyPolicy(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/show_privacy_policy');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/show_privacy_policy');
     }
 
     public function getPrivacyPolicyUrl(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/privacy_policy_url') ?: '');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/privacy_policy_url') ?: '');
     }
 
     public function getShowCookiePolicy(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/show_cookie_policy');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/show_cookie_policy');
     }
 
     public function getCookiePolicyUrl(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/cookie_policy_url') ?: '');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/cookie_policy_url') ?: '');
     }
 
     public function getEnableDataDownload(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/enable_data_download');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/enable_data_download');
     }
 
     public function getEnableAnonymize(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/enable_anonymize');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/enable_anonymize');
     }
 
     public function getEnableDeleteAccount(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/enable_delete_account');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/enable_delete_account');
     }
 
     public function getEnableOptOut(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/enable_opt_out');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/enable_opt_out');
     }
 
     public function getEnableDpoInfo(): bool
     {
-        return (bool) $this->scopeConfig->getValue('pdprotect/customer_privacy/enable_dpo_info');
+        return (bool) $this->pdHelper->getStoreConfig('pdprotect/customer_privacy/enable_dpo_info');
     }
 
     public function getDpoName(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/dpo_name') ?: '');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/dpo_name') ?: '');
     }
 
     public function getDpoEmail(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/dpo_email') ?: '');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/dpo_email') ?: '');
     }
 
     public function getDpoPhone(): string
     {
-        return (string) ($this->scopeConfig->getValue('pdprotect/customer_privacy/dpo_phone') ?: '');
+        return (string) ($this->pdHelper->getStoreConfig('pdprotect/customer_privacy/dpo_phone') ?: '');
     }
 
     // --- Data Deletion & Anonymization Config getters ---
@@ -286,6 +318,6 @@ class Configure implements ArgumentInterface
 
     public function saveConfig(string $path, mixed $value): void
     {
-        $this->configWriter->save($path, $value, 'default', 0);
+        $this->pdHelper->setStoreConfig($path, $value);
     }
 }

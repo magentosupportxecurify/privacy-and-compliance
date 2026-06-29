@@ -30,4 +30,15 @@ class ConsentLogger
             ]
         );
     }
+
+    public function hasActiveConsent(int $customerId): bool
+    {
+        $connection = $this->resource->getConnection();
+        $select = $connection->select()
+            ->from($this->resource->getTableName(self::TABLE), ['log_id'])
+            ->where('customer_id = ?', $customerId)
+            ->where('consent_status = ?', 'accepted')
+            ->limit(1);
+        return (bool) $connection->fetchOne($select);
+    }
 }

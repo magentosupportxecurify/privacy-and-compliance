@@ -2,6 +2,11 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 $viewModel = $block->getData('view_model');
 /** @var \MiniOrange\PDProtect\ViewModel\Adminhtml\Configure $viewModel */
+
+if (!$viewModel->isSupportAllowed()) {
+    return;
+}
+
 $iconUrl   = $viewModel->getViewFileUrl('MiniOrange_PDProtect::images/icon_mo.png');
 $submitUrl = $viewModel->getSupportSubmitUrl();
 ?>

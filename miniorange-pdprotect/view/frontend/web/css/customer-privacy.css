@@ -67,7 +67,7 @@
     text-align: center;
 }
 
-a:visited, .alink:visited {
+a.mopdp-right-card__btn:visited {
     color: #fff !important;
 }
 

@@ -1,0 +1,72 @@
+<?php
+$sections = $this->getCustomerDataSections();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+if ($customerSession->isLoggedIn()) {
+    $fullname = $customerSession->getCustomer()->getName();
+    $fname = $customerSession->getCustomer()->getFirstname();
+    if (!empty($fullname)) {
+?>
+<script>
+    // Function to invalidate and update customer data
+    function mo_invalidate(fullname, firstname) {
+        const welcomeEl = document.querySelector('.greet.welcome');
+        const nameEl = document.querySelector('.customer-name span');
+        if (welcomeEl) welcomeEl.innerHTML = 'Welcome, ' + firstname + '!';
+        if (nameEl) nameEl.innerHTML = fullname;
+    }
+
+
+    // Function to reload customer data for Luma theme (uses require.js and customer-data.js)
+    function reloadCustomerDataLuma() {
+        if (typeof require !== 'undefined' && requirejs) {
+            require(['Magento_Customer/js/customer-data'], function (customerData) {
+                window.customerData = customerData;
+                window.customerData.reload(['customer', 'compare-products', 'last-ordered-items', 'cart']);
+            });
+        }
+    }
+
+    const allCustomerDataSections = <?= /* @noEscape */ json_encode($sections); ?>;
+
+
+    function reloadAllCustomerSectionsHyva() {
+        fetch('/customer/section/load/?sections=' + allCustomerDataSections.join(','))
+            .then(response => response.json())
+            .then(data => {
+                window.customerData = data; // Optional: make globally accessible
+
+
+                // Dispatch event to update Hyva UI
+                window.dispatchEvent(new CustomEvent('private-content-loaded', { detail: { data } }));
+            })
+            .catch(error => console.error("Error loading sections:", error));
+    }
+
+
+    // Check if we are using Hyvä or Luma theme and load the appropriate method
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check for Hyvä theme (if require.js is not defined)
+        if (typeof require === 'undefined') {
+            reloadAllCustomerSectionsHyva();
+        } else {
+            reloadCustomerDataLuma();
+        }
+
+
+        // Execute the function to update UI
+        var delay = 0;
+        while (delay < 5000) {
+            (function (d) {
+                setTimeout(function () {
+                    mo_invalidate("<?php echo $this->escapeJs($fullname); ?>", "<?php echo $this->escapeJs($fname); ?>");
+                }, d);
+            })(delay);
+            delay += 100;
+        }
+    });
+</script>
+<?php
+    }
+}
+?>

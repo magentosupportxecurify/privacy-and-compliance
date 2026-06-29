@@ -46,7 +46,7 @@ if ($viewModel->isPremium() && !$viewModel->isLicenseVerified()) {
 
 <div style="padding: 0 1%;">
     <div class="mopdp-topnav" id="mopdpTopnav" style="display: flex; align-items: center;">
-        <?php if ($viewModel->isPremium()): ?>
+        <?php if ($viewModel->isPremium() && $viewModel->canViewAccountTab()): ?>
         <a class="mopdp-nav-tab <?= $activeTab === 'account' ? 'active' : '' ?>" href="<?= $this->escapeUrl($viewModel->getTabUrl('account')) ?>">
             <i class="fa-solid fa-user"></i> <?= $this->escapeHtml(__('Account')) ?>
         </a>

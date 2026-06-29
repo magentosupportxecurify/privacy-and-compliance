@@ -5,6 +5,11 @@
         <css src="MiniOrange_PDProtect::css/privacy_popup.css"/>
     </head>
     <body>
+        <referenceContainer name="header.panel">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="miniorange.pdprotect.customer.invalidate"
+                   template="MiniOrange_PDProtect::invalidate.phtml" />
+        </referenceContainer>
         <referenceContainer name="before.body.end">
             <block class="MiniOrange\PDProtect\Block\Frontend\PrivacyPopup"
                    name="mopdp.privacy.popup"
