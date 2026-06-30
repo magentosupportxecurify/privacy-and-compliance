@@ -32,7 +32,7 @@
         "php": "~7||~8",
         "miniorange_inc/cookie-consent": "*",
         "miniorange_inc/miniorange-magento-pdprotect": "*",
-        "miniorange/personal-data-protection-premium" "*"
+        "miniorange/personal-data-protection-premium": "*"
     },
     "autoload": {
         "files": [
