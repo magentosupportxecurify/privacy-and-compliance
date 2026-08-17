@@ -32,9 +32,6 @@
         "privacy consent",
         "Privacy Policy"
     ],
-    "require": {
-        "php": "~7|~8"
-    },
     "support": {
         "email": "magentosupport@xecurify.com"
     },
