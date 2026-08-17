@@ -39,6 +39,13 @@
         "miniorange_inc/miniorange-pdprotect-premium": "self.version",
         "miniorange_inc/cookie-consent": "self.version"
     },
+    "repositories": [
+        {
+            "name": "mo-cookie-consent-free",
+            "type": "vcs",
+            "url": "https://github.com/magentosupportxecurify/miniOrange-magento-cookieconsent_free"
+        }
+    ],
     "autoload": {
         "files": [
             "registration.php",
