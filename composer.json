@@ -40,8 +40,7 @@
     },
     "replace": {
         "miniorange_inc/miniorange-pdprotect": "self.version",
-        "miniorange_inc/miniorange-pdprotect-premium": "self.version",
-        "miniorange_inc/cookie-consent": "self.version"
+        "miniorange_inc/miniorange-pdprotect-premium": "self.version"
     },
     "repositories": [
         {
@@ -54,13 +53,11 @@
         "files": [
             "registration.php",
             "privacy/registration.php",
-            "cookie-consent/registration.php",
             "miniorange-pdprotect/registration.php",
             "miniorange-pdprotect-premium/registration.php"
         ],
         "psr-4": {
             "MiniOrange\\Privacy\\": "privacy",
-            "MiniOrange\\CookieConsent\\": "cookie-consent",
             "MiniOrange\\PDProtect\\": "miniorange-pdprotect",
             "MiniOrange\\PDProtectPremium\\": "miniorange-pdprotect-premium"
         }
